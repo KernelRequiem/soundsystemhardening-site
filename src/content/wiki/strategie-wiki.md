@@ -128,7 +128,7 @@ Si vous avez des compétences dans un des domaines listés et que vous voulez co
 
 **Via le formulaire de contact** sur [soundsystemhardening.fr/contact](/contact), indiquez votre domaine de compétence et le type de contribution envisagée.
 
-**Via GitHub** directement, ouvrez une issue ou une discussion sur [github.com/KernelRequiem/SoundSystemHardening](https://github.com/KernelRequiem/SoundSystemHardening).
+**Via GitHub** directement, ouvrez une issue ou une discussion sur [github.com/KernelRequiem/soundsystemhardening-site](https://github.com/KernelRequiem/soundsystemhardening-site).
 
 **Via Signal**, pour les échanges sensibles ou si vous préférez ne pas passer par GitHub. Laissez un moyen de contact dans le formulaire de contact, on vous rejoint.
 

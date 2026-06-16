@@ -1,6 +1,6 @@
 # Git — Cheatsheet SoundSystemHardening
 
-Remote : `https://github.com/KernelRequiem/SoundSystemHardening.git`
+Remote : `https://github.com/KernelRequiem/soundsystemhardening-site.git`
 Branche principale : `main`
 
 ---

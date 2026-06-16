@@ -120,7 +120,7 @@
 
 ## ℹ️ À propos du projet
 
-* [README](https://github.com/KernelRequiem/SoundSystemHardening#readme)
-* [Contribuer](https://github.com/KernelRequiem/SoundSystemHardening/blob/main/CONTRIBUTING.md)
-* [Code de conduite](https://github.com/KernelRequiem/SoundSystemHardening/blob/main/CODE_OF_CONDUCT.md)
-* [Licence CC BY-SA 4.0](https://github.com/KernelRequiem/SoundSystemHardening/blob/main/LICENSE.md)
+* [README](https://github.com/KernelRequiem/soundsystemhardening-site#readme)
+* [Contribuer](https://github.com/KernelRequiem/soundsystemhardening-site/blob/main/CONTRIBUTING.md)
+* [Code de conduite](https://github.com/KernelRequiem/soundsystemhardening-site/blob/main/CODE_OF_CONDUCT.md)
+* [Licence CC BY-SA 4.0](https://github.com/KernelRequiem/soundsystemhardening-site/blob/main/LICENSE.md)
