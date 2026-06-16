@@ -1,0 +1,21 @@
+# Dépendances
+node_modules/
+
+# Build
+dist/
+.astro/
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Secrets et configuration locale : ne doivent JAMAIS être versionnés
+.env
+.env.*
+*.bak
+*.backup
+*.backup-*
+
+# Données mutables d'administration (runtime)
+data/admin/
+src/content/wiki/.trash/

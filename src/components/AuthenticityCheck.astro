@@ -1,0 +1,131 @@
+---
+// Vérification d'authenticité (anti-clone).
+// Le vrai risque pour le visiteur n'est pas que CE site fuite, mais qu'il atterrisse
+// sur un CLONE piégé (typosquat, faux canal). Cet encart donne les repères vérifiables
+// pour confirmer qu'on est bien sur l'original : domaine exact, empreinte PGP réelle,
+// canaux officiels. Aucune valeur inventée ; pas de .onion tant qu'il n'existe pas.
+
+import Icon from './Icon.astro';
+
+const OFFICIAL_DOMAIN = 'soundsystemhardening.fr';
+const PGP_FINGERPRINT = '1399 F26F 66A3 D65C FC76  B496 BF9D E339 889F D4FD';
+const TELEGRAM = '@SOUNDSYSTEMHARD';
+const SIGNAL = 'KernelRequiem.27';
+---
+
+<section class="auth" aria-labelledby="auth-title">
+  <div class="auth-head">
+    <span class="auth-ic" aria-hidden="true"><Icon name="shield_check" size={18} /></span>
+    <h2 id="auth-title" class="auth-title">Vérifier que tu es sur le vrai site</h2>
+  </div>
+  <p class="auth-intro">
+    Le risque n'est pas seulement qu'un site te piste : c'est de tomber sur un <strong>clone piégé</strong>
+    (adresse imitée, faux canal). Voici les repères pour confirmer l'original. En cas de doute, recoupe-les.
+  </p>
+
+  <ul class="auth-list">
+    <li class="auth-row">
+      <span class="auth-key">Domaine officiel</span>
+      <span class="auth-val">
+        <code id="auth-domain">{OFFICIAL_DOMAIN}</code>
+        <span class="auth-status" id="auth-domain-status" aria-live="polite"></span>
+      </span>
+      <span class="auth-note">Toute autre orthographe (tirets, .com, lettres en trop) est un faux.</span>
+    </li>
+
+    <li class="auth-row">
+      <span class="auth-key">Empreinte PGP</span>
+      <span class="auth-val"><code class="auth-fpr">{PGP_FINGERPRINT}</code></span>
+      <span class="auth-note">
+        Un message signé par nous correspond à cette empreinte.
+        <a href="/pgp-public-key.asc" download>Télécharger la clé publique</a> ·
+        <button type="button" class="auth-copy" data-copy={PGP_FINGERPRINT.replace(/\s+/g, ' ')}>copier l'empreinte</button>
+      </span>
+    </li>
+
+    <li class="auth-row">
+      <span class="auth-key">Canaux officiels</span>
+      <span class="auth-val"><code>Telegram {TELEGRAM}</code> · <code>Signal {SIGNAL}</code></span>
+      <span class="auth-note">N'importe quel autre compte se réclamant du projet est une usurpation.</span>
+    </li>
+  </ul>
+
+  <p class="auth-foot" id="auth-foot" aria-live="polite"></p>
+</section>
+
+<script
+  define:vars={{ OFFICIAL_DOMAIN }}
+>
+  (function authCheck() {
+    // 1) Confirme que la page courante est bien servie depuis le domaine officiel.
+    const statusEl = document.getElementById('auth-domain-status');
+    const foot = document.getElementById('auth-foot');
+    const host = location.hostname.replace(/^www\./, '');
+    const onOfficial = host === OFFICIAL_DOMAIN;
+    const isLocal = host === 'localhost' || host === '127.0.0.1' || host.endsWith('.local');
+
+    if (statusEl) {
+      if (onOfficial) { statusEl.textContent = '✓ tu es dessus'; statusEl.dataset.state = 'ok'; }
+      else if (isLocal) { statusEl.textContent = '· environnement local'; statusEl.dataset.state = 'info'; }
+      else { statusEl.textContent = '⚠ tu es sur ' + host; statusEl.dataset.state = 'warn'; }
+    }
+    if (foot) {
+      if (onOfficial) { foot.textContent = "✓ L'adresse de cette page correspond au domaine officiel."; foot.dataset.state = 'ok'; }
+      else if (!isLocal) { foot.textContent = "⚠ Cette page n'est PAS servie depuis " + OFFICIAL_DOMAIN + ". Tu es peut-être sur un clone : ne saisis rien et reviens sur le site officiel."; foot.dataset.state = 'warn'; }
+    }
+
+    // 2) Copie de l'empreinte
+    document.querySelectorAll('.auth-copy').forEach((btn) => {
+      btn.addEventListener('click', async () => {
+        try {
+          await navigator.clipboard.writeText(btn.getAttribute('data-copy') || '');
+          const o = btn.textContent; btn.textContent = '✓ copié';
+          setTimeout(() => { btn.textContent = o; }, 2000);
+        } catch {}
+      });
+    });
+  })();
+</script>
+
+<style>
+  .auth {
+    border: 1px solid rgba(0, 255, 159, 0.3);
+    border-left: 3px solid #00ff9f;
+    background: linear-gradient(180deg, rgba(0,255,159,0.05), rgba(8,8,12,0.4));
+    border-radius: 4px;
+    padding: 20px 22px 22px;
+    margin: 1.5rem 0;
+  }
+  .auth-head { display: flex; align-items: center; gap: 10px; margin-bottom: 10px; }
+  .auth-ic { display: inline-flex; color: #00ff9f; }
+  .auth-title { font-family: 'Space Grotesk', sans-serif; font-size: clamp(16px, 2.4vw, 19px); font-weight: 700; color: #e8e8f0; margin: 0 !important; padding: 0 !important; border: 0 !important; }
+  .auth-title::before, .auth-title::after { content: none !important; }
+  .auth-intro { font-family: 'JetBrains Mono', monospace; font-size: 11.5px; line-height: 1.6; color: rgba(122,122,138,0.95); margin: 0 0 16px; }
+  .auth-intro strong { color: rgba(232,232,240,0.9); }
+
+  .auth-list { list-style: none !important; margin: 0; padding: 0; display: flex; flex-direction: column; gap: 1px; }
+  .auth-list li::before { content: none !important; }
+  .auth-row { margin: 0 !important; background: rgba(8, 8, 12, 0.5); padding: 12px 14px; display: flex; flex-direction: column; gap: 5px; }
+  .auth-key {
+    font-family: 'JetBrains Mono', monospace; font-size: 9px; font-weight: 700;
+    letter-spacing: 0.2em; text-transform: uppercase; color: rgba(0, 255, 159, 0.6);
+  }
+  .auth-val { font-family: 'JetBrains Mono', monospace; font-size: 13px; color: #e8e8f0; display: flex; flex-wrap: wrap; align-items: center; gap: 8px; }
+  .auth-val code { background: rgba(0,255,159,0.06); color: #e8e8f0; padding: 2px 8px; border-radius: 2px; font-size: 12px; word-break: break-all; }
+  .auth-fpr { letter-spacing: 0.04em; }
+  .auth-status { font-size: 11px; font-weight: 700; }
+  .auth-status[data-state="ok"]   { color: #00ff9f; }
+  .auth-status[data-state="warn"] { color: #ff6b6b; }
+  .auth-status[data-state="info"] { color: rgba(150,165,205,0.95); }
+  .auth-note { font-family: 'JetBrains Mono', monospace; font-size: 10.5px; line-height: 1.5; color: rgba(122,122,138,0.85); }
+  .auth-note a { color: rgba(0,255,159,0.8); }
+  .auth-note a:hover { color: #00ff9f; }
+  .auth-copy {
+    background: none; border: none; padding: 0; cursor: pointer;
+    font-family: 'JetBrains Mono', monospace; font-size: 10.5px;
+    color: rgba(0,255,159,0.8); text-decoration: underline; text-underline-offset: 2px;
+  }
+  .auth-copy:hover { color: #00ff9f; }
+  .auth-foot { margin: 14px 0 0; font-family: 'JetBrains Mono', monospace; font-size: 11px; line-height: 1.5; color: rgba(0, 255, 159, 0.85); min-height: 1em; }
+  .auth-foot[data-state="warn"] { color: #ff6b6b; }
+</style>

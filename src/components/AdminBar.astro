@@ -1,0 +1,133 @@
+---
+/**
+ * AdminBar.astro — Barre d'édition flottante (admin/modérateur connecté)
+ *
+ * Affichée UNIQUEMENT si l'utilisateur courant est authentifié (checkAdminAuth).
+ * Pour un visiteur public : le composant ne rend rien du tout (zéro octet, zéro
+ * fuite — aucune trace de l'existence de l'admin dans le HTML public).
+ *
+ * Fonction : barre discrète en bas d'écran avec accès contextuel à l'édition.
+ *  - Sur une page /wiki/<slug> : bouton « Éditer cette page » → ouvre l'éditeur
+ *    HardeningCore pré-rempli (/hardeningcore/wiki/edit?slug=<slug>).
+ *  - Sur les autres pages : lien vers la console (édition en place de ces pages
+ *    viendra dans les itérations CMS suivantes).
+ *
+ * C'est la 1re brique du CMS visuel : barre globale + édition wiki en place.
+ */
+import { checkAdminAuth } from '../lib/adminAuth';
+import { can } from '../lib/permissions';
+
+const auth = checkAdminAuth(Astro.cookies);
+const isAuthed = auth.valid;
+const canEditWiki = isAuthed && can(auth.role, 'wiki.edit');
+const role = auth.role;
+const email = auth.email ?? '';
+const nonce = Astro.locals.cspNonce;
+
+// Détecte si on est sur une page wiki et extrait le slug.
+const path = Astro.url.pathname;
+const wikiMatch = path.match(/^\/wiki\/([^\/?#]+)\/?$/);
+const wikiSlug = wikiMatch ? decodeURIComponent(wikiMatch[1]) : null;
+---
+{isAuthed && (
+  <>
+    <div id="hc-adminbar" data-collapsed="false">
+      <div class="hcb-left">
+        <span class="hcb-brand">Hardening<b>Core</b></span>
+        <span class={`hcb-role ${role === 'admin' ? 'is-admin' : ''}`}>{role === 'admin' ? 'Admin' : 'Modérateur'}</span>
+      </div>
+
+      <div class="hcb-mid">
+        {wikiSlug && canEditWiki ? (
+          <a class="hcb-btn primary" href={`/hardeningcore/wiki/edit?slug=${encodeURIComponent(wikiSlug)}`}>
+            <svg viewBox="0 0 24 24" set:html={"<path d='M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7'/><path d='M18.5 2.5a2.1 2.1 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5Z'/>"} />
+            Éditer cette page
+          </a>
+        ) : wikiSlug ? (
+          <span class="hcb-note">Édition réservée (permission wiki.edit)</span>
+        ) : (
+          <span class="hcb-note">Page non éditable en place pour l'instant</span>
+        )}
+        <a class="hcb-btn" href="/hardeningcore">
+          <svg viewBox="0 0 24 24" set:html={"<rect x='3' y='3' width='7' height='7'/><rect x='14' y='3' width='7' height='7'/><rect x='3' y='14' width='7' height='7'/><rect x='14' y='14' width='7' height='7'/>"} />
+          Console
+        </a>
+      </div>
+
+      <div class="hcb-right">
+        <span class="hcb-mail">{email}</span>
+        <button class="hcb-x" id="hcb-collapse" title="Réduire" aria-label="Réduire la barre">
+          <svg viewBox="0 0 24 24" set:html={"<path d='M6 9l6 6 6-6'/>"} />
+        </button>
+      </div>
+    </div>
+
+    <button id="hc-adminbar-fab" title="Barre d'édition" aria-label="Afficher la barre d'édition">
+      <svg viewBox="0 0 24 24" set:html={"<path d='M12 2 4 6v6c0 5 3.5 8.5 8 10 4.5-1.5 8-5 8-10V6l-8-4Z'/><path d='m9 12 2 2 4-4'/>"} />
+    </button>
+
+    <style is:inline>
+      #hc-adminbar{
+        position:fixed; left:50%; bottom:18px; transform:translateX(-50%);
+        z-index:9998; display:flex; align-items:center; gap:16px;
+        padding:9px 14px; max-width:calc(100vw - 24px);
+        background:rgba(8,8,12,.92); backdrop-filter:blur(10px);
+        border:1px solid rgba(0,255,159,.28);
+        box-shadow:0 12px 40px -12px rgba(0,0,0,.7), 0 0 0 1px rgba(0,255,159,.05);
+        font-family:'JetBrains Mono',ui-monospace,monospace; color:#e8e8f0;
+        transition:transform .22s cubic-bezier(.2,.8,.2,1), opacity .22s;
+      }
+      #hc-adminbar::before{content:'';position:absolute;left:0;top:0;width:28px;height:2px;background:#00ff9f;box-shadow:0 0 10px rgba(0,255,159,.5)}
+      #hc-adminbar[data-collapsed="true"]{transform:translateX(-50%) translateY(120px);opacity:0;pointer-events:none}
+      .hcb-left{display:flex;align-items:center;gap:9px}
+      .hcb-brand{font-family:'Space Grotesk',system-ui,sans-serif;font-size:13px;font-weight:700;letter-spacing:-.2px;color:#e8e8f0}
+      .hcb-brand b{color:#00ff9f}
+      .hcb-role{font-size:8.5px;font-weight:700;text-transform:uppercase;letter-spacing:.12em;color:#9a9ab0;border:1px solid rgba(255,255,255,.1);padding:2px 6px}
+      .hcb-role.is-admin{color:#00ff9f;border-color:rgba(0,255,159,.3);background:rgba(0,255,159,.05)}
+      .hcb-mid{display:flex;align-items:center;gap:8px;border-left:1px solid rgba(255,255,255,.08);border-right:1px solid rgba(255,255,255,.08);padding:0 14px}
+      .hcb-btn{display:inline-flex;align-items:center;gap:6px;font-family:inherit;font-size:11.5px;font-weight:600;color:#9a9ab0;text-decoration:none;border:1px solid rgba(255,255,255,.1);padding:6px 11px;transition:.14s;white-space:nowrap;background:transparent;cursor:pointer}
+      .hcb-btn:hover{color:#00ff9f;border-color:rgba(0,255,159,.3);background:rgba(0,255,159,.05)}
+      .hcb-btn svg{width:14px;height:14px;stroke:currentColor;stroke-width:1.9;fill:none}
+      .hcb-btn.primary{background:#00ff9f;color:#04110d;border-color:#00ff9f;font-weight:700}
+      .hcb-btn.primary:hover{background:#fff;border-color:#fff;color:#04110d}
+      .hcb-note{font-size:10.5px;color:#6a6a80;white-space:nowrap}
+      .hcb-right{display:flex;align-items:center;gap:10px}
+      .hcb-mail{font-size:10.5px;color:#6a6a80;max-width:160px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+      .hcb-x{display:inline-flex;align-items:center;justify-content:center;width:26px;height:26px;border:1px solid rgba(255,255,255,.1);background:transparent;color:#9a9ab0;cursor:pointer;transition:.14s}
+      .hcb-x:hover{color:#00ff9f;border-color:rgba(0,255,159,.3)}
+      .hcb-x svg{width:14px;height:14px;stroke:currentColor;stroke-width:2;fill:none}
+      #hc-adminbar-fab{
+        position:fixed;left:50%;bottom:18px;transform:translateX(-50%) translateY(120px);
+        z-index:9997;width:42px;height:42px;display:flex;align-items:center;justify-content:center;
+        background:rgba(8,8,12,.92);backdrop-filter:blur(10px);border:1px solid rgba(0,255,159,.3);
+        cursor:pointer;transition:transform .22s cubic-bezier(.2,.8,.2,1);opacity:0;pointer-events:none;
+      }
+      #hc-adminbar-fab.show{transform:translateX(-50%) translateY(0);opacity:1;pointer-events:auto}
+      #hc-adminbar-fab svg{width:20px;height:20px;stroke:#00ff9f;stroke-width:1.8;fill:none}
+      #hc-adminbar-fab:hover{border-color:#00ff9f;box-shadow:0 0 18px -4px rgba(0,255,159,.4)}
+      @media (max-width:640px){
+        .hcb-mail{display:none}
+        #hc-adminbar{gap:10px;padding:8px 10px}
+        .hcb-mid{padding:0 8px;gap:6px}
+      }
+    </style>
+
+    <script nonce={nonce} is:inline>
+      (function(){
+        var bar = document.getElementById('hc-adminbar');
+        var fab = document.getElementById('hc-adminbar-fab');
+        var col = document.getElementById('hcb-collapse');
+        if(!bar || !fab) return;
+        function setCollapsed(c){
+          bar.setAttribute('data-collapsed', c ? 'true' : 'false');
+          fab.classList.toggle('show', c);
+          try { localStorage.setItem('hc_adminbar_collapsed', c ? '1':'0'); } catch(e){}
+        }
+        if(col) col.addEventListener('click', function(){ setCollapsed(true); });
+        fab.addEventListener('click', function(){ setCollapsed(false); });
+        // Restaure l'état précédent (réduite ou non).
+        try { if(localStorage.getItem('hc_adminbar_collapsed') === '1') setCollapsed(true); } catch(e){}
+      })();
+    </script>
+  </>
+)}

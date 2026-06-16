@@ -1,0 +1,332 @@
+---
+// src/pages/a-propos.astro
+import Layout from '../layouts/Layout.astro';
+import PrivacyProof from '../components/PrivacyProof.astro';
+import AuthenticityCheck from '../components/AuthenticityCheck.astro';
+---
+
+<Layout
+  title="À propos & Transparence"
+  category="PROJET"
+  description="Ce que SoundSystemHardening est, comment il fonctionne, et les garanties techniques et juridiques mises en place pour protéger ses utilisateurs."
+>
+
+  <h1>Ce site, sans filtre</h1>
+  <p class="text-dedsec-muted text-sm font-mono tracking-widest uppercase mb-10">
+    ▸ Présentation · Architecture · Sécurité · Transparence
+  </p>
+
+  <!-- STATUTS CLÉS -->
+  <div class="grid grid-cols-2 md:grid-cols-5 gap-3 mb-12">
+    {[
+      { label: 'ZÉRO COOKIE', sub: 'Aucun traceur' },
+      { label: 'ZÉRO JS TIERS', sub: 'Pages wiki' },
+      { label: 'CODE OUVERT', sub: 'GitHub public' },
+      { label: 'AUTO-GÉRÉ', sub: 'Sans tiers' },
+      { label: 'STATIQUE', sub: 'Zéro backend' },
+    ].map(s => (
+      <div class="card-neon text-center py-4 px-2">
+        <div class="text-neon-green font-mono font-bold text-[10px] tracking-widest">{s.label}</div>
+        <div class="text-dedsec-muted/60 text-[9px] font-mono mt-1.5 uppercase tracking-wider">{s.sub}</div>
+      </div>
+    ))}
+  </div>
+
+  <!-- ═══════════════════════════════════════════════════════ -->
+  <!-- 1. CE QUE C'EST                                         -->
+  <!-- ═══════════════════════════════════════════════════════ -->
+
+  <h2>Ce que c'est</h2>
+
+  <p>
+    SoundSystemHardening, c'est un espace collectif, libre et gratuit : un wiki, de la doc et des outils, réunis au même endroit.
+    L'idée est simple : rassembler ce qu'il faut savoir pour organiser une teuf ou y participer
+    sans se faire écraser par un État qui durcit sa loi chaque année.
+  </p>
+  <p>
+    Droits face aux forces de l'ordre. Sécurité numérique avant, pendant et après un événement.
+    Stratégies juridiques pour contester une saisie ou une garde à vue. Méthodes de terrain qui exploitent
+    les failles légales et pratiques. Carte des incidents répressifs documentés.
+  </p>
+  <p>
+    Ce n'est pas une association. Pas un parti. Pas un service commercial. C'est un dépôt de
+    connaissances, maintenu par des gens qui vivent ce sujet.
+  </p>
+
+  <div class="info-box my-6">
+    Le mouvement free party n'a pas besoin d'une structure pour exister. Cette plateforme non plus.
+    L'autogestion, c'est aussi ça : des outils collectifs sans hiérarchie ni intermédiaire.
+  </div>
+
+  <!-- ═══════════════════════════════════════════════════════ -->
+  <!-- 2. QUI EST DERRIÈRE                                     -->
+  <!-- ═══════════════════════════════════════════════════════ -->
+
+  <h2>Qui est derrière</h2>
+
+  <p>
+    Nous sommes un collectif de personnes issues du milieu de la cybersécurité et du mouvement
+    free party. Pas une association déclarée. Pas une structure formelle. Des gens qui cumulent
+    des compétences techniques et une connaissance du terrain, et qui ont décidé de les mettre
+    au service d'un mouvement qui revendique la liberté de se rassembler, de danser et d'exister
+    en dehors des circuits commerciaux.
+  </p>
+  <p>
+    Le contenu est collectif et évolutif. N'importe qui peut proposer une page, corriger
+    une information, signaler un incident. On modère avant publication. La seule contrainte :
+    ce qui est publié doit être sourcé et vérifiable.
+  </p>
+
+  <!-- ═══════════════════════════════════════════════════════ -->
+  <!-- 3. POSITIONNEMENT                                        -->
+  <!-- ═══════════════════════════════════════════════════════ -->
+
+  <h2>Notre positionnement</h2>
+
+  <p>
+    SoundSystemHardening n'est ni une structure militante, ni un service de réduction des risques.
+    Nous construisons des outils techniques concrets pour renforcer la sécurité numérique et juridique
+    des sound systems et du mouvement free party. Notre angle est précis : l'autodéfense numérique et
+    l'OPSEC, un terrain encore peu couvert dans le milieu.
+  </p>
+
+  <h3>Ce que nous sommes</h3>
+  <p>
+    Un atelier d'outils pratiques, pensés pour être utilisés en autonomie : l'<a href="/decision">outil Décision</a>
+    qui génère les bons documents selon la situation, <a href="/timeseal">TimeSeal</a> pour générer un
+    manifeste de saisie horodaté, la <a href="/carte">carte des incidents</a> pour documenter la répression, et la
+    <a href="/wiki/Vue-d'ensemble-veille">veille des menaces</a> pour anticiper. Notre approche est technique
+    et pragmatique : nous préférons un outil qui fonctionne à un discours qui mobilise.
+  </p>
+
+  <h3>Ce que nous ne sommes pas</h3>
+  <p>
+    Nous ne faisons pas de militantisme ni d'activisme au sens traditionnel. Nous ne sommes pas une structure
+    de réduction des risques. Nous ne sommes pas un site d'information générale sur la free party. Ces rôles
+    existent déjà, ils sont tenus par d'autres, et ils sont essentiels. Le nôtre est différent et vient s'ajouter.
+  </p>
+
+  <h3>Ce qui nous distingue</h3>
+  <table>
+    <thead>
+      <tr>
+        <th>Critère</th>
+        <th>Techno+ / Anti-Rep / Freeform</th>
+        <th>SoundSystemHardening</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td>Focus principal</td>
+        <td>Militant, réduction des risques, information générale</td>
+        <td>Outils techniques d'autodéfense</td>
+      </tr>
+      <tr>
+        <td>Niveau technique</td>
+        <td>Moyen</td>
+        <td>Élevé : OPSEC, outils côté client</td>
+      </tr>
+      <tr>
+        <td>Format</td>
+        <td>Articles et accompagnement</td>
+        <td>Outils interactifs : formulaires, générateurs</td>
+      </tr>
+      <tr>
+        <td>Ton</td>
+        <td>Militant ou associatif</td>
+        <td>Clinique, technique, professionnel</td>
+      </tr>
+      <tr>
+        <td>Architecture</td>
+        <td>Classique</td>
+        <td>Privacy by design : statique, zéro tracking</td>
+      </tr>
+    </tbody>
+  </table>
+
+  <h3>Notre approche</h3>
+  <p>
+    Trois principes guident le projet. Nous créons des outils que chacun peut utiliser seul, sans intermédiaire
+    ni compte. Nous documentons les menaces et les tactiques de façon structurée, plutôt qu'au fil de l'actualité.
+    Nous mettons l'accent sur la sécurité numérique, un domaine longtemps négligé dans le mouvement alors qu'il
+    conditionne aujourd'hui la sécurité physique et juridique.
+  </p>
+
+  <h3>Complémentarité, pas concurrence</h3>
+  <p>
+    Nous ne nous opposons ni à Techno+, ni aux collectifs Anti-Rep, ni à Freeform. Leur travail de terrain,
+    de prévention et de mobilisation est irremplaçable. Nous cherchons à le compléter en ajoutant une couche
+    technique et des outils pratiques là où ils manquent. Chacun sa spécialité, au service de la même cause.
+  </p>
+
+  <div class="info-box my-6">
+    Pas de concurrence, une addition. La prévention, la mobilisation et l'information ont déjà leurs spécialistes.
+    Nous apportons la brique technique : des outils que l'on garde dans la poche et que l'on utilise le jour où ça compte.
+  </div>
+
+  <!-- ═══════════════════════════════════════════════════════ -->
+  <!-- 4. INFRASTRUCTURE                                        -->
+  <!-- ═══════════════════════════════════════════════════════ -->
+
+  <h2>Sécurité côté serveur</h2>
+
+  <p>
+    L'essentiel du site est <strong>pré-compilé en HTML statique</strong>. Quand vous chargez
+    une page, vous recevez du HTML et du CSS déjà prêts. Pas de base de données exposée au public,
+    pas de session, pas de profil utilisateur. La surface d'attaque est réduite au minimum, et
+    il n'y a aucune donnée de visiteur à compromettre.
+  </p>
+
+  <div class="grid grid-cols-1 md:grid-cols-3 gap-4 mt-6 mb-8">
+
+    <div class="card-neon px-5 py-5">
+      <div class="font-mono text-xs font-bold text-neon-green mb-1 tracking-widest uppercase">Aucun tiers sur le trafic</div>
+      <p class="text-dedsec-muted/80 text-sm leading-relaxed m-0 mt-2" style="font-family:'Space Grotesk',sans-serif;">
+        Le trafic des visiteurs ne transite par aucun prestataire commercial susceptible de
+        le journaliser ou de l'analyser. Aucune donnée de navigation n'est revendue ni partagée.
+      </p>
+    </div>
+
+    <div class="card-neon px-5 py-5">
+      <div class="font-mono text-xs font-bold text-neon-green mb-1 tracking-widest uppercase">Infrastructure auto-gérée</div>
+      <p class="text-dedsec-muted/80 text-sm leading-relaxed m-0 mt-2" style="font-family:'Space Grotesk',sans-serif;">
+        Aucune dépendance à une plateforme cloud commerciale. L'infrastructure est entièrement
+        contrôlée et auditée par le collectif, avec des outils libres.
+      </p>
+    </div>
+
+    <div class="card-neon px-5 py-5">
+      <div class="font-mono text-xs font-bold text-neon-green mb-1 tracking-widest uppercase">Connexions chiffrées</div>
+      <p class="text-dedsec-muted/80 text-sm leading-relaxed m-0 mt-2" style="font-family:'Space Grotesk',sans-serif;">
+        Toutes les connexions sont chiffrées de bout en bout, et des en-têtes de sécurité HTTP
+        sont appliqués à chaque réponse.
+      </p>
+    </div>
+
+  </div>
+
+  <p class="text-dedsec-muted/70 text-sm" style="font-family:'Space Grotesk',sans-serif;">
+    Par principe de réduction de la surface d'attaque, nous ne détaillons pas publiquement
+    les composants précis de notre infrastructure. Le code applicatif, lui, reste entièrement
+    ouvert et auditable sur GitHub.
+  </p>
+
+  <!-- ═══════════════════════════════════════════════════════ -->
+  <!-- 4. CE QU'ON NE COLLECTE PAS                             -->
+  <!-- ═══════════════════════════════════════════════════════ -->
+
+  <h2>Ce qu'on ne collecte pas</h2>
+
+  <p>La réponse est simple : <strong>rien sur vous</strong>.</p>
+
+  <div class="grid grid-cols-1 md:grid-cols-2 gap-3 mt-6 mb-8">
+    {[
+      { title: 'Zéro cookie', desc: 'Aucun cookie de session, de tracking ou publicitaire.' },
+      { title: 'Zéro analytics', desc: 'Pas de Google Analytics, Facebook Pixel, Hotjar, Matomo, ni aucun équivalent.' },
+      { title: 'Zéro fingerprinting', desc: 'Aucune empreinte navigateur collectée.' },
+      { title: 'Zéro JS tiers', desc: 'Sur les pages wiki, aucun script externe n\'est chargé.' },
+      { title: 'Zéro géolocalisation', desc: 'Bloquée dans les headers HTTP. Le navigateur ne peut pas la demander.' },
+      { title: 'Zéro micro / caméra', desc: 'Accès bloqué au niveau des headers de sécurité.' },
+    ].map(item => (
+      <div class="card-neon px-4 py-4 flex gap-3 items-start">
+        <span class="text-neon-green font-mono text-sm mt-0.5 flex-shrink-0">✓</span>
+        <div>
+          <div class="font-mono text-xs font-bold text-neon-green tracking-wider mb-1">{item.title}</div>
+          <p class="text-dedsec-muted/70 text-sm m-0" style="font-family:'Space Grotesk',sans-serif;">{item.desc}</p>
+        </div>
+      </div>
+    ))}
+  </div>
+
+  <!-- ═══════════════════════════════════════════════════════ -->
+  <!-- 5. PREUVES VÉRIFIABLES                                  -->
+  <!-- ═══════════════════════════════════════════════════════ -->
+
+  <h2>Preuves : vérifiables maintenant</h2>
+
+  <p>
+    Chaque affirmation ci-dessus est vérifiable. Pas besoin de nous faire confiance sur parole.
+  </p>
+
+  <PrivacyProof />
+
+  <AuthenticityCheck />
+
+  <h3>1. Code source public</h3>
+  <p>
+    L'intégralité du code est sur GitHub. Chaque fichier, chaque commit, chaque modification
+    depuis le premier jour. Vous pouvez lire le code, l'inspecter, le forker.
+  </p>
+  <a
+    href="https://github.com/KernelRequiem/SoundSystemHardening"
+    target="_blank"
+    rel="noopener noreferrer"
+    class="btn-neon inline-flex mb-6 no-underline after:hidden"
+  >
+    ▸ Voir le repo GitHub
+  </a>
+
+  <h3>2. Headers de sécurité HTTP</h3>
+  <p>
+    Ces headers sont envoyés avec chaque réponse HTTP. Vérifiez-le vous-même :
+    DevTools → onglet Network → clic sur n'importe quelle requête → Response Headers.
+  </p>
+
+  <pre><code>X-Frame-Options: DENY
+# Bloque l'intégration du site dans un iframe (protection clickjacking)
+
+X-Content-Type-Options: nosniff
+# Interdit au navigateur de deviner le type MIME
+
+Referrer-Policy: strict-origin-when-cross-origin
+# Limite ce qui est transmis dans le header Referer aux sites externes
+
+Permissions-Policy: geolocation=(), microphone=(), camera=()
+# Interdit l'accès à la géolocalisation, au micro et à la caméra</code></pre>
+
+  <h3>3. Aucun script tiers</h3>
+  <p>
+    Faites <code>View Source</code> sur n'importe quelle page wiki. Aucun script externe dans le HTML.
+    Aucun outil de monitoring, aucun CDN tiers, aucun pixel publicitaire.
+  </p>
+
+  <h3>4. Licence libre</h3>
+  <p>
+    Tout le contenu est publié sous <strong>CC BY-SA 4.0</strong>. Vous pouvez le reprendre,
+    le redistribuer, le modifier, à condition de citer la source et de conserver la même licence.
+    Aucun verrou, aucune propriété intellectuelle revendiquée.
+  </p>
+
+  <!-- ═══════════════════════════════════════════════════════ -->
+  <!-- 6. NOTE CARTE                                           -->
+  <!-- ═══════════════════════════════════════════════════════ -->
+
+  <h2>Note sur la carte interactive</h2>
+
+  <p>
+    La carte de la répression charge ses tuiles depuis les serveurs CartoDB (OpenStreetMap).
+    C'est le seul composant du site qui contacte un service externe lors de la navigation -
+    les serveurs CartoDB voient votre adresse IP quand vous consultez <a href="/carte">/carte</a>.
+    CartoDB ne construit pas de profil publicitaire. Si vous souhaitez une couverture complète :
+    utilisez un VPN ou Tor avant de consulter la carte.
+  </p>
+
+  <!-- CTA -->
+  <div class="flex flex-wrap gap-4 mt-10">
+    <a
+      href="https://github.com/KernelRequiem/SoundSystemHardening"
+      target="_blank"
+      rel="noopener noreferrer"
+      class="btn-neon no-underline after:hidden"
+    >
+      ▸ Lire le code source
+    </a>
+    <a
+      href="/contribuer"
+      class="btn-neon no-underline after:hidden"
+    >
+      ▸ Contribuer au wiki
+    </a>
+  </div>
+
+</Layout>

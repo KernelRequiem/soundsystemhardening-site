@@ -1,0 +1,1417 @@
+---
+import Layout from '../layouts/Layout.astro';
+import { tickerItems } from '../data/ticker';
+import Icon from '../components/Icon.astro';
+---
+
+<Layout
+  title="Home"
+  description="Outils, droits et entraide numérique pour le mouvement free party. Carte de la répression, évaluateur de terrain, droits en garde à vue, contre-RIPOST."
+>
+
+  <!-- ═══════════════════════════════════════════════════════════
+       TICKER PLEINE LARGEUR
+  ═══════════════════════════════════════════════════════════ -->
+  <div class="ticker-fullbleed">
+    <a href="/actu" class="ticker-link no-underline" aria-label="Voir toutes les actualités">
+      <div class="ticker-wrap">
+        <div class="ticker-label">ACTUS</div>
+        <div class="ticker-mask">
+          <div class="ticker-track">
+            {[...tickerItems, ...tickerItems].map(item => (
+              <span class="ticker-item">{item}</span>
+            ))}
+          </div>
+        </div>
+        <div class="ticker-cta">TOUT VOIR ›</div>
+      </div>
+    </a>
+  </div>
+
+  <!-- ═══════════════════════════════════════════════════════════
+       HERO
+  ═══════════════════════════════════════════════════════════ -->
+  <section class="hero-section">
+
+    <!-- Headline -->
+    <div class="hero-headline">
+      <div class="hero-pretitle"><span class="hero-pretitle-dot"></span>RESISTANCE TOOLKIT · FREE PARTY</div>
+      <h1 class="hero-title">
+        <span class="hero-title-pre">SOUND<span class="title-green">SYSTEM</span></span>
+        <span class="hero-title-main" data-glitch="HARDENING">HARDENING</span>
+      </h1>
+
+      <!-- Accroche manifeste : la tension EUX/NOUS condensee en une ligne. Coeur du hero. -->
+      <p class="hero-manifesto">
+        Ils criminalisent.
+        <span class="hero-manifesto-us">Nous documentons, protégeons, ripostons.</span>
+      </p>
+    </div>
+
+    <!-- CTA principaux -->
+    <div class="hero-cta">
+      <a href="/commencer" class="hero-cta-primary">
+        <Icon name="start" size={16} class="hero-cta-icon" /> Commencer ici
+      </a>
+      <a href="/decision" class="hero-cta-secondary">
+        <Icon name="decision" size={16} class="hero-cta-icon" /> Arbre de décision
+      </a>
+      <a href="/map" class="hero-cta-secondary">
+        <Icon name="map" size={16} class="hero-cta-icon" /> Carte de la répression
+      </a>
+    </div>
+
+    <!-- Engagements : sous-ligne discrete (registre "ce que le site garantit"), pas une grille
+         de compteurs. Des valeurs qui ne vieillissent pas, en filet, sans voler la vedette. -->
+    <ul class="hero-pledges" aria-label="Nos engagements">
+      <li><a href="https://github.com/KernelRequiem/SoundSystemHardening" target="_blank" rel="noopener noreferrer"><b>100%</b> Open source</a></li>
+      <li><a href="/faq#privacy"><b>0</b> tracker</a></li>
+      <li><a href="/faq#privacy"><b>Auto-géré</b> sans tiers</a></li>
+      <li><a href="/faq#projet"><b>Libre</b> · CC BY-SA</a></li>
+      <li class="hero-pledge-alert"><a href="/wiki/ripost"><b>2 ans</b> de prison · RIPOST</a></li>
+    </ul>
+
+  </section>
+
+  <!-- ═══════════════════════════════════════════════════════════
+       PRÉSENTATION
+  ═══════════════════════════════════════════════════════════ -->
+  <section class="si-section">
+
+    <!-- MOT DE BIENVENUE · LANCEMENT (temporaire) : à retirer après la période de lancement.
+         Placé en tête de section, juste sous le héros, pour accueillir les visiteurs. -->
+    <div class="si-welcome">
+      <div class="si-welcome-head">
+        <span class="si-welcome-pill"><span class="si-welcome-pill-dot"></span>Lancement · fin juin 2026</span>
+        <span class="si-welcome-ver">v1.0 · première version</span>
+      </div>
+      <p class="si-welcome-lead">
+        Bienvenue. Ce site ouvre ses portes : un espace entièrement neuf, construit par le mouvement et pour le mouvement.
+      </p>
+      <p class="si-welcome-text">
+        Nous y portons le plus grand soin, mais soyons clairs : le projet reste expérimental et ouvert à la contribution. Tout ce qui s'y trouve demeure corrigible et optimisable. Si vous repérez une erreur ou une piste d'amélioration, dites-le nous.
+      </p>
+      <p class="si-welcome-text">
+        Nous espérons sincèrement qu'il sera utile : pour porter le mouvement, protéger celles et ceux qui le font vivre, et servir la cause d'une culture libre.
+      </p>
+    </div>
+
+    <!-- Ligne d'identité -->
+    <div class="si-eyebrow">
+      <span class="si-badge"><span class="hidden md:inline">Plateforme collective · Open source · CC BY-SA 4.0</span><span class="md:hidden">Open source · CC BY-SA</span></span>
+    </div>
+
+    <!-- Statement principal -->
+    <div class="si-statement">
+      <p class="si-statement-lead">Une infrastructure d'autodéfense pour le mouvement free party.</p>
+      <div class="si-statement-tags">
+        <span>Wiki juridique</span>
+        <span>Documentation OPSEC</span>
+        <span>Outils numériques</span>
+        <span>Carte des incidents</span>
+      </div>
+      <p class="si-statement-sign">Construit par le mouvement, pour le mouvement.</p>
+    </div>
+
+    <!-- Trois axes visuels -->
+    <div class="si-pillars">
+      <div class="si-pillar reveal" data-reveal-delay="1">
+        <div class="si-pillar-icon">◈</div>
+        <div class="si-pillar-name">Comprendre</div>
+        <div class="si-pillar-body">Loi RIPOST, droits GAV, jurisprudences, cadre légal décrypté sans jargon.</div>
+        <a href="/wiki" class="si-pillar-link">Parcourir le wiki →</a>
+      </div>
+      <div class="si-pillar-sep"></div>
+      <div class="si-pillar reveal" data-reveal-delay="2">
+        <div class="si-pillar-icon">◉</div>
+        <div class="si-pillar-name">Résister</div>
+        <div class="si-pillar-body">Arbre de décision en temps réel. Failles légales, zones où l'État ne peut structurellement pas intervenir.</div>
+        <a href="/decision" class="si-pillar-link">Accéder à l'arbre →</a>
+      </div>
+      <div class="si-pillar-sep"></div>
+      <div class="si-pillar reveal" data-reveal-delay="3">
+        <div class="si-pillar-icon">◎</div>
+        <div class="si-pillar-name">Documenter</div>
+        <div class="si-pillar-body">TimeSeal génère un manifeste de saisie horodaté localement. Chaque preuve compte dans un recours.</div>
+        <a href="/timeseal" class="si-pillar-link">Ouvrir TimeSeal →</a>
+      </div>
+    </div>
+
+    <!-- Appel à contribution -->
+    <div class="si-contrib">
+      <div class="si-contrib-body">
+        <div class="si-contrib-label">Porter le mouvement</div>
+        <p class="si-contrib-text">
+          Cette plateforme est une ressource vivante. Elle grandit avec chaque jurisprudence ajoutée, chaque incident documenté, chaque retour de terrain partagé. Si tu connais des éléments manquants, contribue.
+        </p>
+      </div>
+      <div class="si-contrib-cta">
+        <a href="mailto:contact@soundsystemhardening.fr" class="si-btn-primary">
+          <span>✦</span> Contribuer
+        </a>
+        <a href="/wiki/Contacts-Allies" class="si-btn-secondary">
+          Alliances &amp; contacts
+        </a>
+      </div>
+    </div>
+
+  </section>
+
+  <!-- ═══════════════════════════════════════════════════════════
+       MANIFESTE
+  ═══════════════════════════════════════════════════════════ -->
+  <section class="manifeste-section">
+
+    <span class="section-label">MANIFESTE</span>
+    <h2 class="manifeste-h2">Ce que nous sommes</h2>
+    <p class="manifeste-intro">
+      Ce que nous sommes, ce que nous défendons, pourquoi nous ne nous arrêterons pas.
+    </p>
+
+    <div class="manifeste-stack">
+
+      <!-- I. D'où nous venons -->
+      <details class="manifeste-item group">
+        <summary class="manifeste-summary">
+          <span class="manifeste-num">I.</span>
+          <span class="manifeste-sum-label group-hover:text-neon-green transition-colors">D'où nous venons</span>
+          <span class="manifeste-arrow group-open:rotate-90">▸</span>
+        </summary>
+        <div class="manifeste-body">
+          <p>Jamaïque, années 1950. Les sound systems sortent la musique des clubs fermés et la portent dans les rues, les cours, les terrains vagues. Quand on n'a pas les moyens d'entrer, on construit sa propre scène.</p>
+          <p>Angleterre, 1994. Le <strong>Criminal Justice Act</strong> criminalise les rassemblements à musique répétitive. Spiral Tribe quitte le pays. La répression n'a pas tué la free party, elle l'a exportée sur le continent.</p>
+          <p>France, 2001. L'<strong>amendement Mariani</strong> impose la déclaration préalable. La free party entre dans le droit pour mieux être réprimée. France, 2026 : la loi RIPOST ajoute 2 ans de prison. À chaque vague répressive, le mouvement s'est outillé. <strong>Cette plateforme aussi.</strong></p>
+        </div>
+      </details>
+
+      <!-- II. Ce que nous sommes -->
+      <details class="manifeste-item group">
+        <summary class="manifeste-summary">
+          <span class="manifeste-num">II.</span>
+          <span class="manifeste-sum-label group-hover:text-neon-green transition-colors">Ce que nous sommes</span>
+          <span class="manifeste-arrow group-open:rotate-90">▸</span>
+        </summary>
+        <div class="manifeste-body">
+          <p>Un mouvement de <strong>30 ans</strong>. Des espaces gratuits, sans sélection à l'entrée, sans hiérarchie. Des collectifs qui construisent leur son de leurs propres mains, sur des terrains que personne d'autre ne revendique.</p>
+          <p>En 2024, la techno française est inscrite au <strong>patrimoine culturel immatériel de l'UNESCO</strong>. L'État qui la récompense d'un côté la criminalise de l'autre. Le paradoxe est la politique.</p>
+          <div class="manifeste-values">
+            {[
+              { label: 'BIENVEILLANCE', txt: 'Techno+, Freeform - réduction des risques sans jugement', accent: true },
+              { label: 'FÉMINISME',     txt: 'Safer space, protocoles contre les violences sexistes', accent: true },
+              { label: 'ANTI-FASCISME', txt: "Culture d'accueil inconditionnelle", accent: false },
+              { label: 'SOLIDARITÉ',    txt: 'FSJS - défense collective face aux saisies', accent: true },
+            ].map(v => (
+              <div class={`value-item ${v.accent ? 'value-accent' : 'value-muted'}`}>
+                <span class="value-label">{v.label}</span>
+                <span class="value-txt">{v.txt}</span>
+              </div>
+            ))}
+          </div>
+        </div>
+      </details>
+
+      <!-- III. Ce que nous défendons -->
+      <details class="manifeste-item group">
+        <summary class="manifeste-summary">
+          <span class="manifeste-num">III.</span>
+          <span class="manifeste-sum-label group-hover:text-neon-green transition-colors">Ce que nous défendons</span>
+          <span class="manifeste-arrow group-open:rotate-90">▸</span>
+        </summary>
+        <div class="manifeste-body">
+          {[
+            { head: 'La liberté de rassemblement', body: 'Art. 11 CESDH. Ériger une free party en délit est une violation disproportionnée et documentable.' },
+            { head: 'La gratuité comme refus du marché', body: "L'État accepte la techno quand elle rapporte de la TVA. Il la réprime quand elle n'en rapporte pas. Ce n'est pas un hasard." },
+            { head: "L'autogestion", body: "Le DIY n'est pas une contrainte économique. C'est une philosophie d'autonomie qui ne demande pas de permission." },
+            { head: 'La réduction des risques', body: "Le soin n'est jamais une infraction. Techno+ opère là où l'État ne va pas." },
+          ].map(item => (
+            <div class="defend-item">
+              <span class="defend-bullet">◆</span>
+              <span><strong>{item.head}</strong> : {item.body}</span>
+            </div>
+          ))}
+          <div class="defend-memorial">
+            <strong>La mémoire des victimes</strong> : Steve Maia Caniço (Nantes, 2019) : mort après une charge de police lors de la Fête de la Musique. Redon 2021 : un participant perd une main lors d'une intervention de gendarmerie. Carhaix 2025 : tirs à balles réelles sur un véhicule. Ces violences ne sont pas des accidents : elles sont le produit d'une politique de force maximale contre des rassemblements non-armés.
+          </div>
+        </div>
+      </details>
+
+      <!-- IV. Ce que nous refusons -->
+      <details class="manifeste-item group manifeste-item-critical">
+        <summary class="manifeste-summary manifeste-summary-critical">
+          <span class="manifeste-num manifeste-num-critical">IV.</span>
+          <span class="manifeste-sum-label manifeste-sum-critical group-hover:text-neon-red transition-colors">Ce que nous refusons</span>
+          <span class="manifeste-arrow manifeste-arrow-critical group-open:rotate-90">▸</span>
+        </summary>
+        <div class="manifeste-body manifeste-body-critical">
+          {[
+            { head: 'La criminalisation de la présence', body: "Danser n'est pas un crime. La loi RIPOST en fait un délit passible de 6 mois de prison. C'est disproportionné et contestable." },
+            { head: "L'amalgame avec le crime organisé", body: "Les infractions réelles sont déjà réprimées par le droit commun. La répression des free parties en tant que telles est idéologique, pas sécuritaire." },
+            { head: 'La répression préventive', body: "Les arrêtés préfectoraux couvrant des départements entiers avant tout incident sont incompatibles avec l'État de droit et attaquables devant le tribunal administratif." },
+            { head: "L'institutionnalisation forcée", body: "On ne règle pas une free party en la déclarant. On ne protège pas la culture en la marchandisant." },
+          ].map(item => (
+            <div class="refuse-item">
+              <span class="refuse-bullet">✕</span>
+              <span><strong style="color:#e8e8f0">{item.head}</strong> : {item.body}</span>
+            </div>
+          ))}
+        </div>
+      </details>
+
+      <!-- V. Ce que nous exigeons -->
+      <details class="manifeste-item group">
+        <summary class="manifeste-summary">
+          <span class="manifeste-num">V.</span>
+          <span class="manifeste-sum-label group-hover:text-neon-green transition-colors">Ce que nous exigeons</span>
+          <span class="manifeste-arrow group-open:rotate-90">▸</span>
+        </summary>
+        <div class="manifeste-body">
+          {[
+            { n:'01', head: "Fin de l'exception répressive", body: "Arrêt des délits de présence et de complicité par le soin. Le personnel de réduction des risques ne peut pas être poursuivi pour exercer sa mission." },
+            { n:'02', head: "Abrogation du régime Mariani", body: "25 ans d'existence, 0 preuve d'efficacité sur la sécurité. Il a produit de la clandestinité, pas de la protection." },
+            { n:'03', head: "Fin des interdictions massives", body: "Restrictions ciblées, motivées juridiquement, délimitées géographiquement. Pas des arrêtés blancs couvrant un département entier." },
+            { n:'04', head: "La désescalade systématique", body: "Médiation, accès aux secours garanti sans interpellation des soignants, interdiction des charges nocturnes sur des rassemblements non-violents." },
+          ].map(item => (
+            <div class="demand-item">
+              <span class="demand-num">{item.n}.</span>
+              <span><strong>{item.head}</strong> : {item.body}</span>
+            </div>
+          ))}
+        </div>
+      </details>
+
+    </div>
+
+    <!-- VI. Citation : hors accordéon -->
+    <div class="manifeste-closing">
+      <p class="closing-body">
+        La free party a survécu au Criminal Justice Act (1994), à la loi Mariani (2001), à d'innombrables arrêtés préfectoraux et à des centaines de saisies de matériel. Elle a survécu parce qu'elle <strong>ne dépend de personne</strong> : pas d'un label rachetable, pas d'un festival sans financement, pas d'un serveur qui peut être mis sous scellés.
+      </p>
+      <p class="closing-body">
+        La loi RIPOST ajoute un chapitre au même livre. Cette plateforme est notre réponse. <strong>Rendre l'information aussi difficile à saisir que la musique.</strong>
+      </p>
+    </div>
+
+  </section>
+
+  <script>
+    (function() {
+      const el      = document.getElementById('stQuote');
+      const cursor  = document.getElementById('stCursor');
+      const source  = document.getElementById('stSource');
+      const text    = 'FREE MUSIC FOR FREE PEOPLE';
+      let started   = false;
+
+      function typeWriter() {
+        let i = 0;
+        cursor.style.opacity = '1';
+
+        const interval = setInterval(() => {
+          if (i < text.length) {
+            el.textContent = text.slice(0, i + 1);
+            i++;
+          } else {
+            clearInterval(interval);
+            // curseur clignote 3×, puis disparaît
+            let blinks = 0;
+            const blink = setInterval(() => {
+              cursor.style.opacity = cursor.style.opacity === '0' ? '1' : '0';
+              blinks++;
+              if (blinks >= 6) {
+                clearInterval(blink);
+                cursor.style.opacity = '0';
+                // source apparaît
+                source.style.opacity = '1';
+                source.style.transform = 'translateY(0)';
+              }
+            }, 380);
+          }
+        }, 55);
+      }
+
+      const observer = new IntersectionObserver((entries) => {
+        entries.forEach(entry => {
+          if (entry.isIntersecting && !started) {
+            started = true;
+            setTimeout(typeWriter, 320);
+            observer.disconnect();
+          }
+        });
+      }, { threshold: 0.4 });
+
+      observer.observe(document.getElementById('stQuote'));
+    })();
+  </script>
+
+
+</Layout>
+
+<style>
+  /* Rythme vertical de la home : un seul pas (clamp 56-76px) pour TOUS les
+     grands espacements inter-sections, pour un rythme regulier et coherent.
+     Reutilise directement dans .hero-section et .si-section ci-dessous. */
+
+  /* ═══════════════════════════════════════════════════════
+     TICKER PLEINE LARGEUR
+  ═══════════════════════════════════════════════════════ */
+  .ticker-fullbleed {
+    width: 100vw;
+    position: relative;
+    left: 50%;
+    margin-left: -50vw;
+    margin-top: -32px;
+    margin-bottom: 0;
+    border-top: 1px solid rgba(0, 255, 159, 0.12);
+    border-bottom: 1px solid rgba(0, 255, 159, 0.12);
+  }
+  @media (min-width: 1024px) {
+    .ticker-fullbleed { margin-top: -48px; }
+  }
+
+  .ticker-wrap {
+    display: flex;
+    align-items: center;
+    width: 100%;
+    background: rgba(0, 255, 159, 0.025);
+    overflow: hidden;
+    height: 36px;
+  }
+  .ticker-label {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 9px;
+    font-weight: 700;
+    letter-spacing: 0.2em;
+    color: rgba(0, 255, 159, 0.95);
+    background: rgba(0, 255, 159, 0.1);
+    border-right: 1px solid rgba(0, 255, 159, 0.18);
+    padding: 0 14px;
+    height: 100%;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    flex-shrink: 0;
+    text-transform: uppercase;
+  }
+  /* Point live pulsant devant ACTUS */
+  .ticker-label::before {
+    content: "";
+    width: 6px;
+    height: 6px;
+    border-radius: 50%;
+    background: #00ff9f;
+    box-shadow: 0 0 6px rgba(0, 255, 159, 0.9);
+    flex-shrink: 0;
+    animation: ticker-live 2s ease-in-out infinite;
+  }
+  @keyframes ticker-live {
+    0%, 100% { opacity: 1; transform: scale(1); }
+    50% { opacity: 0.35; transform: scale(0.82); }
+  }
+  .ticker-mask {
+    flex: 1;
+    overflow: hidden;
+    height: 100%;
+    display: flex;
+    align-items: center;
+    /* Fondu sur les bords : les items apparaissent et disparaissent en douceur */
+    -webkit-mask-image: linear-gradient(90deg, transparent 0, #000 28px, #000 calc(100% - 28px), transparent 100%);
+    mask-image: linear-gradient(90deg, transparent 0, #000 28px, #000 calc(100% - 28px), transparent 100%);
+  }
+  .ticker-track {
+    display: flex;
+    align-items: center;
+    white-space: nowrap;
+    animation: ticker-scroll 90s linear infinite;
+  }
+  .ticker-track:hover { animation-play-state: paused; }
+  .ticker-item {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 11px;
+    color: rgba(200, 200, 216, 0.82);
+    letter-spacing: 0.05em;
+    padding: 0 32px;
+    border-right: 1px solid rgba(0, 255, 159, 0.08);
+    flex-shrink: 0;
+  }
+  @keyframes ticker-scroll {
+    0%   { transform: translateX(0); }
+    100% { transform: translateX(-50%); }
+  }
+  /* Mobile : ticker plus compact (plus d'infos visibles + defilement plus vif) */
+  @media (max-width: 640px) {
+    .ticker-wrap { height: 28px; }
+    .ticker-label { font-size: 8px; letter-spacing: 0.14em; padding: 0 10px; gap: 6px; }
+    .ticker-item { font-size: 10px; padding: 0 18px; }
+    .ticker-track { animation-duration: 60s; }
+  }
+  .ticker-link { display: block; color: inherit; }
+
+  /* Mot de bienvenue lancement (temporaire) : carte d'annonce, accent doré discret.
+     Placée juste sous le héros pour être visible d'entrée. */
+  .si-welcome {
+    position: relative;
+    margin: 0 auto 48px;
+    max-width: 760px;
+    padding: 30px 34px 32px;
+    border: 1px solid rgba(227, 179, 65, 0.30);
+    border-radius: 6px;
+    background:
+      radial-gradient(140% 120% at 0% 0%, rgba(227, 179, 65, 0.10) 0%, transparent 58%),
+      linear-gradient(180deg, rgba(227, 179, 65, 0.04), rgba(10, 10, 15, 0.55));
+    box-shadow: 0 18px 50px -28px rgba(227, 179, 65, 0.35), inset 0 1px 0 rgba(255, 243, 192, 0.05);
+    overflow: hidden;
+  }
+  /* Liseré doré supérieur */
+  .si-welcome::before {
+    content: "";
+    position: absolute;
+    top: 0; left: 0; right: 0;
+    height: 2px;
+    background: linear-gradient(90deg, transparent 0%, rgba(227, 179, 65, 0.85) 50%, transparent 100%);
+    z-index: 2;
+  }
+  /* Balayage lumineux discret */
+  .si-welcome::after {
+    content: "";
+    position: absolute;
+    top: 0;
+    left: -60%;
+    width: 45%;
+    height: 100%;
+    background: linear-gradient(105deg, transparent 0%, rgba(255, 238, 180, 0.10) 50%, transparent 100%);
+    transform: skewX(-18deg);
+    animation: si-welcome-sheen 7s ease-in-out infinite;
+    pointer-events: none;
+  }
+  @keyframes si-welcome-sheen {
+    0% { left: -60%; }
+    55%, 100% { left: 135%; }
+  }
+  .si-welcome > * { position: relative; z-index: 1; }
+
+  /* En-tête : pastille de statut + version */
+  .si-welcome-head {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    gap: 10px;
+    margin-bottom: 18px;
+    padding-bottom: 16px;
+    border-bottom: 1px solid rgba(227, 179, 65, 0.16);
+  }
+  .si-welcome-pill {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    color: #f0d68a;
+    border: 1px solid rgba(227, 179, 65, 0.38);
+    border-radius: 999px;
+    padding: 5px 12px;
+    background: rgba(227, 179, 65, 0.06);
+  }
+  .si-welcome-pill-dot {
+    width: 6px; height: 6px;
+    border-radius: 50%;
+    background: #e3b341;
+    box-shadow: 0 0 7px #e3b341;
+    animation: si-welcome-pulse 2.4s ease-in-out infinite;
+  }
+  @keyframes si-welcome-pulse {
+    0%, 100% { opacity: 1; box-shadow: 0 0 7px #e3b341; }
+    50% { opacity: 0.45; box-shadow: 0 0 2px #e3b341; }
+  }
+  .si-welcome-ver {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 9.5px;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: rgba(227, 179, 65, 0.55);
+  }
+  /* Phrase d'accroche : plus présente que le corps */
+  .si-welcome-lead {
+    font-family: 'Space Grotesk', sans-serif;
+    font-size: 16.5px;
+    font-weight: 600;
+    line-height: 1.55;
+    color: #fdf6e0;
+    margin: 0 0 14px;
+  }
+  .si-welcome-text {
+    font-family: 'Space Grotesk', sans-serif;
+    font-size: 14px;
+    line-height: 1.72;
+    color: rgba(232, 226, 208, 0.82);
+    margin: 0 0 12px;
+  }
+  .si-welcome-text:last-of-type { margin-bottom: 0; }
+  @media (prefers-reduced-motion: reduce) {
+    .si-welcome::after, .si-welcome-pill-dot, .ticker-label::before { animation: none; }
+  }
+  .ticker-cta {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 9px;
+    font-weight: 700;
+    letter-spacing: 0.18em;
+    color: rgba(0, 255, 159, 0.85);
+    background: rgba(0, 255, 159, 0.07);
+    border-left: 1px solid rgba(0, 255, 159, 0.18);
+    padding: 0 14px;
+    height: 100%;
+    display: flex;
+    align-items: center;
+    flex-shrink: 0;
+    text-transform: uppercase;
+    transition: background 0.15s, color 0.15s;
+  }
+  .ticker-link:hover .ticker-cta { background: rgba(0, 255, 159, 0.16); color: #00ff9f; }
+  .ticker-link:hover .ticker-label { background: rgba(0, 255, 159, 0.16); }
+  @media (max-width: 640px) {
+    .ticker-cta { display: none; }
+  }
+
+  /* ═══════════════════════════════════════════════════════
+     HERO
+  ═══════════════════════════════════════════════════════ */
+  .hero-section {
+    margin-bottom: 44px;
+    padding-top: 48px;
+    padding-bottom: 40px;
+    border-bottom: 1px solid rgba(42, 42, 58, 0.35);
+    text-align: center;
+  }
+
+  /* ── HEADLINE ── */
+  .hero-headline {
+    margin-bottom: 52px;
+    animation: hero-fade-up 0.6s ease both;
+    animation-delay: 0.05s;
+  }
+  .hero-pretitle {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 11px;
+    letter-spacing: 0.24em;
+    color: rgba(0, 255, 159, 0.72);
+    text-transform: uppercase;
+    margin-bottom: 18px;
+    animation: hero-fade-up 0.6s ease both;
+    animation-delay: 0.05s;
+  }
+  .hero-title {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 4px;
+    margin: 0 auto 16px;
+    line-height: 0.9;
+    font-family: 'Space Grotesk', 'Bebas Neue', sans-serif;
+    font-weight: 800;
+    text-transform: uppercase;
+    animation: hero-fade-up 0.65s ease both;
+    animation-delay: 0.18s;
+  }
+  /* Ligne haute : SOUNDSYSTEM, sobre mais nette (nom de marque, doit rester lisible) */
+  .hero-title-pre {
+    font-size: clamp(18px, 3.2vw, 38px);
+    color: rgba(232, 232, 240, 0.72);
+    letter-spacing: 0.34em;
+    /* compense le letter-spacing pour garder le bloc optiquement centré */
+    text-indent: 0.34em;
+    font-weight: 600;
+  }
+  .title-green {
+    color: rgba(0, 255, 159, 0.9);
+    text-shadow: 0 0 18px rgba(0, 255, 159, 0.2);
+  }
+  /* Ligne basse : HARDENING, dominant */
+  .hero-title-main {
+    position: relative;
+    font-size: clamp(62px, 12vw, 128px);
+    color: #e8e8f0;
+    letter-spacing: -0.02em;
+    animation: hardening-glitch 7s linear infinite;
+    animation-delay: 1.8s;
+  }
+  .hero-title-main::before,
+  .hero-title-main::after {
+    content: attr(data-glitch);
+    position: absolute;
+    top: 0;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 100%;
+    opacity: 0;
+    font-size: inherit;
+    font-weight: inherit;
+    letter-spacing: inherit;
+    line-height: inherit;
+    pointer-events: none;
+  }
+  .hero-title-main::before {
+    color: #00ff9f;
+    animation: glitch-green 7s linear infinite;
+    animation-delay: 1.8s;
+  }
+  .hero-title-main::after {
+    color: rgba(255, 68, 68, 0.7);
+    animation: glitch-pink 7s linear infinite;
+    animation-delay: 1.8s;
+  }
+
+  /* ── ACCROCHE MANIFESTE : coeur editorial du hero ── */
+  .hero-manifesto {
+    font-family: 'Space Grotesk', sans-serif;
+    font-size: clamp(20px, 3vw, 30px);
+    font-weight: 600;
+    line-height: 1.3;
+    letter-spacing: -0.01em;
+    max-width: 720px;
+    margin: 26px auto 0;
+    color: rgba(232, 232, 240, 0.55);
+    animation: hero-fade-up 0.65s ease both;
+    animation-delay: 0.3s;
+  }
+  .hero-manifesto-us {
+    color: #e8e8f0;
+    position: relative;
+    white-space: nowrap;
+  }
+  /* Léger soulignement néon sous la partie "NOUS" */
+  .hero-manifesto-us::after {
+    content: '';
+    position: absolute;
+    left: 0; right: 0; bottom: -4px;
+    height: 2px;
+    background: linear-gradient(90deg, rgba(0,255,159,0.9), rgba(0,255,159,0.15));
+  }
+  /* ── CTA ── */
+  .hero-cta {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 14px;
+    margin: 36px auto 40px;
+    animation: hero-fade-up 0.65s ease both;
+    animation-delay: 0.5s;
+  }
+  .hero-cta-primary,
+  .hero-cta-secondary {
+    display: inline-flex;
+    align-items: center;
+    gap: 10px;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 12px;
+    font-weight: 700;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    text-decoration: none;
+    padding: 13px 24px;
+    border-radius: 3px;
+    transition: transform 0.15s ease, box-shadow 0.2s ease, background 0.2s ease, border-color 0.2s ease, color 0.2s ease;
+  }
+  .hero-cta-icon { font-size: 14px; line-height: 1; }
+  .hero-cta-primary {
+    background: #00ff9f;
+    color: #06120d;
+    box-shadow: 0 0 0 1px rgba(0,255,159,0.4), 0 10px 30px -12px rgba(0,255,159,0.6);
+  }
+  .hero-cta-primary:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 0 0 1px rgba(0,255,159,0.7), 0 14px 36px -12px rgba(0,255,159,0.8);
+  }
+  .hero-cta-secondary {
+    background: rgba(0,255,159,0.04);
+    color: rgba(232, 232, 240, 0.92);
+    border: 1px solid rgba(42, 42, 58, 0.9);
+  }
+  .hero-cta-secondary:hover {
+    transform: translateY(-2px);
+    color: #00ff9f;
+    border-color: rgba(0,255,159,0.55);
+    background: rgba(0,255,159,0.07);
+  }
+
+  /* ── ENGAGEMENTS : sous-ligne discrète, en filet ── */
+  .hero-pledges {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    align-items: center;
+    gap: 8px 0;
+    max-width: 720px;
+    margin: 0 auto;
+    padding: 0;
+    list-style: none;
+    animation: hero-fade-up 0.65s ease both;
+    animation-delay: 0.6s;
+  }
+  .hero-pledges li { display: inline-flex; align-items: center; }
+  /* Séparateur en point médian entre les engagements */
+  .hero-pledges li + li::before {
+    content: '·';
+    color: rgba(42, 42, 58, 1);
+    margin: 0 14px;
+  }
+  .hero-pledges a {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 11px;
+    letter-spacing: 0.04em;
+    color: rgba(122, 122, 138, 0.85);
+    text-decoration: none;
+    transition: color 0.15s ease;
+    white-space: nowrap;
+  }
+  .hero-pledges a b {
+    color: rgba(0, 255, 159, 0.95);
+    font-weight: 700;
+  }
+  .hero-pledges a:hover { color: rgba(232, 232, 240, 0.95); }
+  .hero-pledges a:hover b { text-shadow: 0 0 10px rgba(0,255,159,0.5); }
+  .hero-pledge-alert a b { color: #ff5c5c; }
+  .hero-pledge-alert a:hover b { text-shadow: 0 0 10px rgba(255,68,68,0.5); }
+
+  /* Point clignotant du pretitle (statut "en ligne") */
+  .hero-pretitle-dot {
+    display: inline-block;
+    width: 6px; height: 6px;
+    border-radius: 50%;
+    background: #00ff9f;
+    box-shadow: 0 0 6px #00ff9f;
+    margin-right: 9px;
+    vertical-align: 1px;
+    animation: ssh-footer-pulse 2s ease-in-out infinite;
+  }
+
+  @media (max-width: 560px) {
+    .hero-cta { flex-direction: column; align-items: stretch; }
+    .hero-cta-primary, .hero-cta-secondary { justify-content: center; }
+    .hero-manifesto-us { white-space: normal; }
+
+    /* Engagements en liste de pastilles pleine largeur : alignement parfait sur mobile */
+    .hero-pledges {
+      flex-direction: column;
+      gap: 6px;
+      padding: 0;
+      max-width: 320px;
+    }
+    .hero-pledges li + li::before { display: none; }   /* on retire les séparateurs · */
+    .hero-pledges li { width: 100%; display: block; }
+    .hero-pledges a {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      white-space: nowrap;
+      width: 100%;
+      padding: 9px 14px;
+      border: 1px solid rgba(42, 42, 58, 0.8);
+      border-radius: 4px;
+      background: rgba(0, 255, 159, 0.02);
+      font-size: 11px;
+    }
+    /* La valeur (100%, 0, CH...) a largeur fixe -> tous les libellés s'alignent */
+    .hero-pledges a b {
+      flex: 0 0 auto;
+      min-width: 42px;
+    }
+    .hero-pledge-alert a { border-color: rgba(255, 68, 68, 0.3); background: rgba(255, 68, 68, 0.03); }
+
+    /* Badge identité : version courte sur mobile, tient sur une ligne */
+    .si-badge {
+      letter-spacing: 0.16em;
+      white-space: nowrap;
+    }
+    /* Signature : compacte sur mobile pour tenir sur une ligne */
+    .si-statement-sign {
+      font-size: 10px;
+      letter-spacing: 0.06em;
+    }
+  }
+
+  /* ═══════════════════════════════════════════════════════
+     PRÉSENTATION DU SITE
+  ═══════════════════════════════════════════════════════ */
+  .si-section {
+    margin-bottom: clamp(56px, 7vw, 76px);
+  }
+
+  /* Ligne d'identité */
+  .si-eyebrow {
+    margin-bottom: 20px;
+  }
+  .si-badge {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 9px;
+    letter-spacing: 0.22em;
+    text-transform: uppercase;
+    color: rgba(0, 255, 159, 0.55);
+    border: 1px solid rgba(0, 255, 159, 0.16);
+    background: rgba(0, 255, 159, 0.03);
+    padding: 4px 12px;
+  }
+
+  /* Statement principal */
+  .si-statement {
+    margin: 0 0 40px;
+    border-left: 2px solid rgba(0, 255, 159, 0.30);
+    padding-left: 22px;
+  }
+  .si-statement-lead {
+    font-family: 'Space Grotesk', sans-serif;
+    font-size: clamp(14px, 3vw, 30px);
+    font-weight: 600;
+    color: #e8e8f0;
+    line-height: 1.3;
+    letter-spacing: -0.01em;
+    white-space: nowrap;
+    margin: 0 0 18px;
+  }
+  @media (max-width: 480px) {
+    .si-statement-lead { white-space: normal; font-size: 18px; line-height: 1.4; }
+  }
+  .si-statement-tags {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    margin-bottom: 18px;
+  }
+  .si-statement-tags span {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: rgba(0, 255, 159, 0.9);
+    border: 1px solid rgba(0, 255, 159, 0.28);
+    background: rgba(0, 255, 159, 0.05);
+    padding: 5px 12px;
+  }
+  .si-statement-sign {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 12px;
+    font-weight: 700;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: rgba(122, 122, 138, 0.85);
+    margin: 0;
+  }
+
+  /* Trois piliers */
+  .si-pillars {
+    display: grid;
+    grid-template-columns: 1fr 1px 1fr 1px 1fr;
+    gap: 0;
+    border: 1px solid rgba(42, 42, 58, 0.55);
+    background: rgba(8, 8, 12, 0.65);
+    margin-bottom: 0;
+  }
+
+  .si-pillar-sep {
+    background: rgba(42, 42, 58, 0.55);
+  }
+
+  .si-pillar {
+    padding: 28px 28px 24px;
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    transition: background 0.18s;
+  }
+  .si-pillar:hover { background: rgba(0, 255, 159, 0.022); }
+
+  .si-pillar-icon {
+    font-size: 18px;
+    color: rgba(0, 255, 159, 0.45);
+    line-height: 1;
+    margin-bottom: 4px;
+  }
+
+  .si-pillar-name {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 22px;
+    letter-spacing: 0.06em;
+    color: #e8e8f0;
+    line-height: 1;
+  }
+
+  .si-pillar-body {
+    font-family: 'Space Grotesk', sans-serif;
+    font-size: 13px;
+    color: rgba(155, 155, 180, 0.80);
+    line-height: 1.65;
+    flex: 1;
+  }
+
+  .si-pillar-link {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 9px;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: rgba(0, 255, 159, 0.55);
+    text-decoration: none;
+    margin-top: 6px;
+    transition: color 0.15s;
+  }
+  .si-pillar-link:hover { color: #00ff9f; }
+
+  /* Bloc contribution */
+  .si-contrib {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 36px;
+    padding: 26px 28px;
+    border: 1px solid rgba(42, 42, 58, 0.55);
+    border-top: none;
+    border-left: 2px solid rgba(0, 255, 159, 0.32);
+    background: rgba(0, 255, 159, 0.015);
+  }
+
+  .si-contrib-label {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 9px;
+    letter-spacing: 0.22em;
+    text-transform: uppercase;
+    color: rgba(0, 255, 159, 0.55);
+    margin-bottom: 8px;
+  }
+
+  .si-contrib-text {
+    font-family: 'Space Grotesk', sans-serif;
+    font-size: 13px;
+    color: rgba(165, 165, 190, 0.80);
+    line-height: 1.65;
+    margin: 0;
+    max-width: 520px;
+  }
+
+  .si-contrib-cta {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    flex-shrink: 0;
+  }
+
+  .si-btn-primary,
+  .si-btn-secondary {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    padding: 11px 22px;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 10px;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    text-decoration: none;
+    transition: all 0.15s;
+    white-space: nowrap;
+  }
+
+  .si-btn-primary {
+    background: rgba(0, 255, 159, 0.09);
+    border: 1px solid rgba(0, 255, 159, 0.32);
+    color: #00ff9f;
+    box-shadow: 0 0 18px rgba(0, 255, 159, 0.07), inset 0 0 12px rgba(0, 255, 159, 0.03);
+  }
+  .si-btn-primary:hover {
+    background: rgba(0, 255, 159, 0.15);
+    border-color: rgba(0, 255, 159, 0.55);
+    transform: translateY(-1px);
+    box-shadow: 0 0 28px rgba(0, 255, 159, 0.12);
+  }
+
+  .si-btn-secondary {
+    background: transparent;
+    border: 1px solid rgba(42, 42, 58, 0.70);
+    color: rgba(150, 150, 175, 0.75);
+  }
+  .si-btn-secondary:hover {
+    border-color: rgba(0, 255, 159, 0.28);
+    color: rgba(0, 255, 159, 0.78);
+  }
+
+  @media (max-width: 680px) {
+    .si-pillars {
+      grid-template-columns: 1fr;
+    }
+    .si-pillar-sep { height: 1px; width: auto; }
+    .si-contrib {
+      flex-direction: column;
+      align-items: flex-start;
+      gap: 20px;
+    }
+    .si-contrib-cta {
+      flex-direction: row;
+      flex-wrap: wrap;
+      width: 100%;
+    }
+    .si-btn-primary,
+    .si-btn-secondary {
+      flex: 1 1 auto;
+      min-width: 0;
+      white-space: normal;
+      text-align: center;
+      padding: 11px 16px;
+    }
+  }
+  @media (max-width: 420px) {
+    .si-contrib-cta { flex-direction: column; }
+    .si-btn-primary,
+    .si-btn-secondary { width: 100%; }
+  }
+
+  /* Titre Manifeste */
+  .manifeste-h2 {
+    font-size: 20px !important;
+    margin-top: 6px !important;
+    margin-bottom: 6px !important;
+    border-color: rgba(0, 255, 159, 0.08) !important;
+  }
+
+  .situations-list {
+    display: flex;
+    flex-direction: column;
+    border: 1px solid rgba(42, 42, 58, 0.55);
+    overflow: hidden;
+  }
+
+  .sit {
+    display: grid;
+    grid-template-columns: 68px 1fr auto 28px;
+    align-items: center;
+    gap: 24px;
+    padding: 24px 28px;
+    border-bottom: 1px solid rgba(42, 42, 58, 0.45);
+    background: rgba(8, 8, 12, 0.60);
+    transition: background 0.18s, border-left-color 0.18s;
+    border-left: 2px solid transparent;
+    cursor: pointer;
+    text-decoration: none;
+  }
+  .sit:last-child { border-bottom: none; }
+  .sit:hover {
+    background: rgba(0, 255, 159, 0.025);
+    border-left-color: rgba(0, 255, 159, 0.45);
+  }
+  .sit:hover .sit-arrow { color: #00ff9f; transform: translateX(4px); }
+  .sit:hover .sit-title { color: #00ff9f; }
+
+  .sit-live:hover {
+    background: rgba(0, 255, 159, 0.03);
+    border-left-color: rgba(0, 255, 159, 0.65);
+  }
+
+  .sit-when {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 9px;
+    letter-spacing: 0.22em;
+    text-transform: uppercase;
+    color: rgba(122, 122, 138, 0.55);
+    white-space: nowrap;
+  }
+  .sit-when-live { color: rgba(0, 255, 159, 0.65); }
+
+  .sit-body {
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
+    min-width: 0;
+  }
+
+  .sit-title {
+    font-family: 'Space Grotesk', sans-serif;
+    font-size: 15px;
+    font-weight: 600;
+    color: #e8e8f0;
+    line-height: 1.3;
+    transition: color 0.18s;
+  }
+
+  .sit-desc {
+    font-family: 'Space Grotesk', sans-serif;
+    font-size: 12px;
+    color: rgba(155, 155, 180, 0.80);
+    line-height: 1.65;
+  }
+
+  .sit-tools {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    flex-shrink: 0;
+    flex-wrap: wrap;
+    justify-content: flex-end;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 9px;
+    letter-spacing: 0.10em;
+    color: rgba(100, 100, 120, 0.65);
+    text-align: right;
+    max-width: 180px;
+  }
+  .sit-dot {
+    color: rgba(42, 42, 58, 0.90);
+    font-size: 8px;
+  }
+
+  .sit-arrow {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 14px;
+    color: rgba(80, 80, 100, 0.45);
+    flex-shrink: 0;
+    transition: color 0.18s, transform 0.18s;
+  }
+
+  /* Bande de confiance */
+  .trust-band {
+    display: flex;
+    align-items: stretch;
+    border: 1px solid rgba(42, 42, 58, 0.50);
+    border-top: none;
+    overflow: hidden;
+    background: rgba(5, 5, 10, 0.70);
+  }
+  .trust-item {
+    display: flex;
+    align-items: flex-start;
+    gap: 12px;
+    padding: 14px 22px;
+    flex: 1;
+  }
+  .trust-icon {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 12px;
+    color: rgba(0, 255, 159, 0.40);
+    flex-shrink: 0;
+    margin-top: 1px;
+  }
+  .trust-text {
+    font-family: 'Space Grotesk', sans-serif;
+    font-size: 11px;
+    color: rgba(120, 120, 140, 0.72);
+    line-height: 1.60;
+  }
+  .trust-sep {
+    width: 1px;
+    background: rgba(42, 42, 58, 0.55);
+    flex-shrink: 0;
+    align-self: stretch;
+  }
+
+  @media (max-width: 640px) {
+    .sit { grid-template-columns: 52px 1fr 20px; gap: 12px; padding: 18px 16px; }
+    .sit-tools { display: none; }
+    .trust-band { flex-direction: column; }
+    .trust-sep { width: 100%; height: 1px; }
+  }
+
+  /* ═══════════════════════════════════════════════════════
+     MANIFESTE
+  ═══════════════════════════════════════════════════════ */
+  .manifeste-section { margin-bottom: 8px; }
+
+  .manifeste-intro {
+    font-family: 'Space Grotesk', sans-serif;
+    font-size: 13px;
+    color: rgba(190, 190, 210, 0.75);
+    margin-bottom: 20px;
+  }
+
+  .manifeste-stack { display: flex; flex-direction: column; gap: 2px; }
+
+  .manifeste-item {
+    border: 1px solid rgba(42, 42, 58, 0.65);
+    background: rgba(8, 8, 12, 0.45);
+    transition: border-color 0.2s;
+  }
+  .manifeste-item[open]          { border-color: rgba(0, 255, 159, 0.18); }
+  .manifeste-item-critical[open] { border-color: rgba(255, 68, 68, 0.18); }
+
+  .manifeste-summary {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 14px 18px;
+    cursor: pointer;
+    list-style: none;
+    transition: background 0.15s;
+  }
+  .manifeste-summary::-webkit-details-marker { display: none; }
+  .manifeste-summary:hover          { background: rgba(0, 255, 159, 0.025); }
+  .manifeste-summary-critical:hover { background: rgba(255, 68, 68, 0.025); }
+
+  .manifeste-num          { font-family: 'JetBrains Mono', monospace; font-size: 11px; color: rgba(0, 255, 159, 0.68); width: 24px; flex-shrink: 0; }
+  .manifeste-num-critical { color: rgba(255, 68, 68, 0.72); }
+
+  .manifeste-sum-label    { font-family: 'JetBrains Mono', monospace; font-size: 11px; font-weight: 700; color: #e8e8f0; flex: 1; letter-spacing: 0.04em; }
+  .manifeste-sum-critical { color: rgba(232, 232, 240, 0.8); }
+
+  .manifeste-arrow          { font-family: 'JetBrains Mono', monospace; font-size: 10px; color: rgba(0, 255, 159, 0.55); transition: transform 0.2s; flex-shrink: 0; }
+  .manifeste-arrow-critical { color: rgba(255, 68, 68, 0.55); }
+  details[open] .manifeste-arrow { transform: rotate(90deg); }
+
+  .manifeste-body {
+    padding: 0 18px 18px 54px;
+    border-top: 1px solid rgba(42, 42, 58, 0.35);
+  }
+  .manifeste-body p {
+    font-size: 13px;
+    color: rgba(190, 190, 210, 0.85);
+    line-height: 1.75;
+    margin: 14px 0 0;
+  }
+  .manifeste-body-critical { background: rgba(255, 68, 68, 0.015); }
+
+  .manifeste-values {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 8px;
+    margin-top: 16px;
+    padding-top: 16px;
+    border-top: 1px solid rgba(42, 42, 58, 0.35);
+  }
+  .value-item    { display: flex; flex-direction: column; gap: 3px; padding-left: 10px; border-left: 2px solid; }
+  .value-accent  { border-color: rgba(0, 255, 159, 0.35); }
+  .value-muted   { border-color: rgba(42, 42, 58, 0.7); }
+  .value-label   { font-family: 'JetBrains Mono', monospace; font-size: 10px; font-weight: 700; color: rgba(0, 255, 159, 0.75); letter-spacing: 0.12em; text-transform: uppercase; }
+  .value-txt     { font-family: 'Space Grotesk', sans-serif; font-size: 13px; color: rgba(190, 190, 210, 0.85); line-height: 1.55; }
+
+  .defend-item   { display: flex; gap: 12px; margin-top: 14px; font-family: 'Space Grotesk', sans-serif; font-size: 13px; color: rgba(190, 190, 210, 0.85); line-height: 1.7; }
+  .defend-bullet { color: rgba(0, 255, 159, 0.6); flex-shrink: 0; margin-top: 2px; font-size: 9px; }
+  .defend-memorial {
+    margin-top: 16px; padding: 10px 14px;
+    border-left: 2px solid rgba(255, 68, 68, 0.3);
+    background: rgba(255, 68, 68, 0.025);
+    font-family: 'Space Grotesk', sans-serif; font-size: 13px; color: rgba(190, 190, 210, 0.85); line-height: 1.7;
+  }
+
+  .refuse-item   { display: flex; gap: 12px; margin-top: 14px; font-family: 'Space Grotesk', sans-serif; font-size: 13px; color: rgba(190, 190, 210, 0.85); line-height: 1.7; }
+  .refuse-bullet { color: rgba(255, 68, 68, 0.5); flex-shrink: 0; font-weight: 700; margin-top: 1px; }
+
+  .demand-item { display: flex; gap: 16px; margin-top: 14px; font-family: 'Space Grotesk', sans-serif; font-size: 13px; color: rgba(190, 190, 210, 0.85); line-height: 1.7; }
+  .demand-num  { font-family: 'JetBrains Mono', monospace; font-size: 11px; color: rgba(0, 255, 159, 0.68); width: 20px; flex-shrink: 0; margin-top: 2px; }
+
+  .manifeste-closing {
+    margin-top: 24px;
+    padding: 28px 32px;
+    border: 1px solid rgba(42, 42, 58, 0.55);
+    border-left: 2px solid rgba(0, 255, 159, 0.30);
+    background: rgba(8, 8, 12, 0.55);
+    position: relative;
+  }
+
+  .closing-body {
+    font-family: 'Space Grotesk', sans-serif;
+    font-size: 14px; color: rgba(190, 190, 210, 0.85); line-height: 1.85; margin-bottom: 16px;
+  }
+  .closing-body:last-child { margin-bottom: 0; }
+
+  /* ═══════════════════════════════════════════════════════
+     SPIRAL TRIBE QUOTE
+  ═══════════════════════════════════════════════════════ */
+
+  /* ═══════════════════════════════════════════════════════
+     ANIMATIONS
+  ═══════════════════════════════════════════════════════ */
+  @keyframes hero-fade-up {
+    from {
+      opacity: 0;
+      transform: translateY(14px);
+    }
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+
+  /* HARDENING - glitch avec aberration chromatique verte */
+  @keyframes hardening-glitch {
+    0%, 83%, 100% {
+      transform: translate(0);
+      color: #e8e8f0;
+    }
+    84% {
+      transform: translate(-3px, 1px) skewX(-2deg);
+      color: rgba(232, 232, 240, 0.7);
+    }
+    85% {
+      transform: translate(4px, -2px);
+      color: #e8e8f0;
+    }
+    86% {
+      transform: translate(-2px, 0) skewX(3deg);
+      color: rgba(0, 255, 159, 0.9);
+    }
+    87% {
+      transform: translate(3px, 1px);
+      color: #e8e8f0;
+    }
+    88% {
+      transform: translate(-1px, -1px);
+      color: rgba(232, 232, 240, 0.85);
+    }
+    89% {
+      transform: translate(0);
+      color: #e8e8f0;
+    }
+  }
+
+  @keyframes glitch-green {
+    0%, 83%, 100% { opacity: 0; transform: translateX(-50%); }
+    84% {
+      opacity: 0.85;
+      transform: translateX(calc(-50% - 4px));
+      clip-path: polygon(0 5%, 100% 5%, 100% 38%, 0 38%);
+    }
+    85% { opacity: 0; }
+    86% {
+      opacity: 0.9;
+      transform: translateX(calc(-50% + 3px));
+      clip-path: polygon(0 55%, 100% 55%, 100% 78%, 0 78%);
+    }
+    87% { opacity: 0; }
+    88% {
+      opacity: 0.75;
+      transform: translateX(calc(-50% - 2px));
+      clip-path: polygon(0 20%, 100% 20%, 100% 55%, 0 55%);
+    }
+    89% { opacity: 0; }
+  }
+
+  @keyframes glitch-pink {
+    0%, 83%, 100% { opacity: 0; transform: translateX(-50%); }
+    84% { opacity: 0; }
+    85% {
+      opacity: 0.55;
+      transform: translateX(calc(-50% + 5px));
+      clip-path: polygon(0 45%, 100% 45%, 100% 70%, 0 70%);
+    }
+    86% { opacity: 0; }
+    87% {
+      opacity: 0.6;
+      transform: translateX(calc(-50% - 4px));
+      clip-path: polygon(0 10%, 100% 10%, 100% 40%, 0 40%);
+    }
+    88% { opacity: 0; }
+    89% {
+      opacity: 0.45;
+      transform: translateX(calc(-50% + 2px));
+      clip-path: polygon(0 65%, 100% 65%, 100% 90%, 0 90%);
+    }
+    90% { opacity: 0; }
+  }
+
+  /* ═══════════════════════════════════════════════════════
+     RESPONSIVE
+  ═══════════════════════════════════════════════════════ */
+  @media (max-width: 640px) {
+    .hero-title-main  { font-size: clamp(52px, 14vw, 80px); }
+    .hero-title-pre   { font-size: clamp(14px, 4.5vw, 22px); }
+    .manifeste-values    { grid-template-columns: 1fr; }
+    .manifeste-body      { padding-left: 18px; }
+    .manifeste-closing   { padding: 20px; }
+  }
+</style>

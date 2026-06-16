@@ -1,0 +1,75 @@
+---
+// Icône vectorielle réutilisable (source unique de vérité).
+// Remplace les symboles Unicode cryptiques (⊠, ⊡, ⊕...) par des SVG sémantiques,
+// cohérents avec la DA (tracé stroke, viewBox 24, esthétique brutaliste/terminal).
+// Accessibilité : aria-label fourni -> role="img" + <title> ; sinon aria-hidden.
+//
+// Usage :  <Icon name="timeseal" />  ou  <Icon name="opsec" label="OpSec Tools" size={20} />
+
+interface Props {
+  name: string;
+  label?: string;       // si fourni : icône annoncée aux lecteurs d'écran
+  size?: number;        // px (défaut 24)
+  class?: string;
+  stroke?: number;      // épaisseur du tracé (défaut 1.6)
+}
+
+const { name, label, size = 24, class: className = '', stroke = 1.6 } = Astro.props;
+
+// Registre d'icônes outils + navigation. Chaque entrée = contenu interne du <svg>.
+// Sémantique évidente : œil barré = opsec, chrono scellé = timeseal, etc.
+const ICONS: Record<string, string> = {
+  // ── Outils ──
+  // SoundCheck : ondes sonores (propagation acoustique)
+  soundcheck: `<path d="M3 12h2l2-5 4 14 3-9 1.5 4H21" stroke-linecap="round" stroke-linejoin="round"/>`,
+  // CopWatch : œil dans un viseur (observation des tactiques)
+  copwatch: `<circle cx="12" cy="12" r="3.2"/><path d="M12 4.5c-4.2 0-7.4 3-8.5 7.5 1.1 4.5 4.3 7.5 8.5 7.5s7.4-3 8.5-7.5C19.4 7.5 16.2 4.5 12 4.5Z" stroke-linecap="round" stroke-linejoin="round"/>`,
+  // OpSec : œil barré (protection / anti-surveillance)
+  opsec: `<path d="M3 3l18 18" stroke-linecap="round"/><path d="M10.6 6.1A8.6 8.6 0 0 1 12 6c4.2 0 7.4 3 8.5 7.5a12 12 0 0 1-1.7 3.4M6.2 7.4A12.3 12.3 0 0 0 3.5 13.5C4.6 18 7.8 21 12 21a8.7 8.7 0 0 0 3.6-.76" stroke-linecap="round" stroke-linejoin="round"/><path d="M9.6 10.3a3.2 3.2 0 0 0 4.4 4.4" stroke-linecap="round" stroke-linejoin="round"/>`,
+  // TimeSeal : chronomètre scellé (horodatage scellé)
+  timeseal: `<path d="M12 7.5V12l2.5 1.5" stroke-linecap="round" stroke-linejoin="round"/><circle cx="12" cy="12.5" r="7"/><path d="M9 2.5h6M12 5.5v-3M5.5 6 4 4.5M18.5 6 20 4.5" stroke-linecap="round" stroke-linejoin="round"/>`,
+  // Compliance-Shield : bouclier avec coche (dossier de conformité)
+  shield_check: `<path d="M12 3 5 5.5v5c0 4.5 3 7.7 7 9 4-1.3 7-4.5 7-9v-5L12 3Z" stroke-linecap="round" stroke-linejoin="round"/><path d="m9 11.5 2 2 4-4" stroke-linecap="round" stroke-linejoin="round"/>`,
+  // InfoCrypt : cadenas avec point (chiffrement)
+  infocrypt: `<rect x="5" y="11" width="14" height="9" rx="1.5"/><path d="M8 11V8a4 4 0 0 1 8 0v3" stroke-linecap="round" stroke-linejoin="round"/><circle cx="12" cy="15.5" r="1.2"/>`,
+  // StripMeta : image avec balayage (épuration des métadonnées)
+  stripmeta: `<rect x="4" y="5" width="16" height="14" rx="1.5"/><path d="m4 16 4-4 3 3 3-3 6 6" stroke-linecap="round" stroke-linejoin="round"/><path d="M3 3l18 18" stroke-linecap="round"/>`,
+  // Index outils : grille de modules
+  tools: `<rect x="4" y="4" width="7" height="7" rx="1"/><rect x="13" y="4" width="7" height="7" rx="1"/><rect x="4" y="13" width="7" height="7" rx="1"/><rect x="13" y="13" width="7" height="7" rx="1"/>`,
+  // ── Navigation / terrain ──
+  // Décision : embranchement (arbre de décision)
+  decision: `<circle cx="6" cy="6" r="2.2"/><circle cx="18" cy="6" r="2.2"/><circle cx="12" cy="18" r="2.2"/><path d="M6 8.2v2.3a2 2 0 0 0 2 2h8a2 2 0 0 0 2-2V8.2M12 12.5v3.3" stroke-linecap="round" stroke-linejoin="round"/>`,
+  // Carte : repère cartographique
+  map: `<path d="M9 4 4 6v14l5-2 6 2 5-2V4l-5 2-6-2Z" stroke-linecap="round" stroke-linejoin="round"/><path d="M9 4v14M15 6v14" stroke-linecap="round" stroke-linejoin="round"/>`,
+  // Urgence : triangle d'alerte
+  urgence: `<path d="M12 4 2.5 20h19L12 4Z" stroke-linecap="round" stroke-linejoin="round"/><path d="M12 10v4M12 17h.01" stroke-linecap="round" stroke-linejoin="round"/>`,
+  // Wiki : livre / documentation
+  wiki: `<path d="M5 4h9a3 3 0 0 1 3 3v13a2.5 2.5 0 0 0-2.5-2.5H5V4Z" stroke-linecap="round" stroke-linejoin="round"/><path d="M9 8h5M9 11h5" stroke-linecap="round"/>`,
+  // RIPOST : flèche de riposte (boucle)
+  ripost: `<path d="M4 12a8 8 0 1 1 2.3 5.6" stroke-linecap="round" stroke-linejoin="round"/><path d="M4 20v-4h4" stroke-linecap="round" stroke-linejoin="round"/>`,
+  // Commencer : losange / point d'entrée
+  start: `<path d="M12 3 21 12l-9 9-9-9 9-9Z" stroke-linecap="round" stroke-linejoin="round"/>`,
+  // Contribuer : étoile / plus
+  contribute: `<path d="M12 4v16M4 12h16" stroke-linecap="round"/>`,
+  // Purge : balai (nettoyer ses traces locales) — pas une poubelle (anxiogène)
+  purge: `<path d="M19 5 13.5 10.5M8.5 12.5 5 16a2.5 2.5 0 0 0 0 3.5L7 21.5M14 9l1 1M3 21l3-1" stroke-linecap="round" stroke-linejoin="round"/><path d="M8.5 12.5 11.5 9.5a1.5 1.5 0 0 1 2 0l0.5 0.5a1.5 1.5 0 0 1 0 2L11 15Z" stroke-linecap="round" stroke-linejoin="round"/>`,
+};
+
+const body = ICONS[name] ?? '';
+const a11y = label
+  ? { role: 'img', 'aria-label': label }
+  : { 'aria-hidden': 'true', focusable: 'false' };
+---
+<svg
+  xmlns="http://www.w3.org/2000/svg"
+  width={size} height={size}
+  viewBox="0 0 24 24"
+  fill="none"
+  stroke="currentColor"
+  stroke-width={stroke}
+  class={className}
+  {...a11y}
+>
+  {label && <title>{label}</title>}
+  <Fragment set:html={body} />
+</svg>

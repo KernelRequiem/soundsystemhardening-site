@@ -1,0 +1,346 @@
+---
+// src/pages/actu.astro
+// Page actualités : message de bienvenue (lancement) + reprise détaillée
+// de toutes les entrées du ticker de la page d'accueil.
+import Layout from '../layouts/Layout.astro';
+import { baseTickerItems } from '../data/ticker';
+import { actuPosts } from '../data/actu-posts';
+import { siteStats, incidentTypeLabels } from '../data/site-stats';
+
+// Date lisible FR pour la fraicheur
+const fmtDate = (iso: string) => {
+  if (!iso) return '—';
+  const d = new Date(iso);
+  return d.toLocaleDateString('fr-FR', { day: 'numeric', month: 'short', year: 'numeric' });
+};
+
+function parseItem(s: string): { tag: string; body: string } {
+  const m = s.match(/^\[\s*([^\]]+?)\s*\]\s*(.*)$/);
+  return m ? { tag: m[1], body: m[2] } : { tag: 'INFO', body: s };
+}
+const items = baseTickerItems.map(parseItem);
+
+const TAG_ACCENT: Record<string, string> = {
+  'MAINTENANCE': '#ff4444',
+  'JUIN 2026': '#00ff9f',
+  'VEILLE': '#7a7a8a',
+  'WIKI': '#00ff9f',
+  'OPSEC': '#00ff9f',
+  'INFRA': '#7a7a8a',
+  'DROIT': '#7a7a8a',
+  'MOBILISATION': '#00ff9f',
+  'CULTURE': '#00ff9f',
+};
+const accentOf = (tag: string) => TAG_ACCENT[tag] ?? '#00ff9f';
+---
+
+<Layout
+  title="Actualités"
+  category="ACTUS"
+  description="Le fil d'actualité de SoundSystemHardening : maintenance, veille législative, nouvelles pages du wiki, infrastructure et droit."
+>
+
+  <h1>Actualités</h1>
+  <p class="text-dedsec-muted text-sm font-mono tracking-widest uppercase mb-8">
+    ▸ Le baromètre, le mot de lancement, puis le fil en détail
+  </p>
+
+  <!-- ════════ BAROMÈTRE · données agrégées (src/data) ════════ -->
+  <section class="not-prose baro mb-12" aria-label="Baromètre du site">
+    <div class="baro-head">
+      <span class="baro-live"><span class="baro-live-dot"></span>EN DIRECT</span>
+      <span class="baro-checked">Données vérifiées le {siteStats.ripost.lastChecked}</span>
+    </div>
+
+    <!-- Ligne 1 : statut RIPOST -->
+    <a href="/wiki/ripost" class={`baro-ripost ${siteStats.ripost.inForce ? 'is-inforce' : ''}`}>
+      <span class="baro-ripost-tag">{siteStats.ripost.inForce ? '● RIPOST EN VIGUEUR' : '● RIPOST · PAS ENCORE EN VIGUEUR'}</span>
+      <span class="baro-ripost-stage">{siteStats.ripost.stage}</span>
+    </a>
+
+    <!-- Ligne 2 : chiffres clés -->
+    <div class="baro-grid">
+      <a href="/carte" class="baro-stat">
+        <span class="baro-num">{siteStats.incidentsTotal}</span>
+        <span class="baro-lbl">incidents documentés</span>
+      </a>
+      <a href="/carte" class="baro-stat">
+        <span class="baro-num">{siteStats.departmentsTouched}</span>
+        <span class="baro-lbl">départements touchés</span>
+      </a>
+      <a href="/wiki" class="baro-stat">
+        <span class="baro-num">{siteStats.wikiPages}</span>
+        <span class="baro-lbl">pages wiki</span>
+      </a>
+      <div class="baro-stat baro-stat--static">
+        <span class="baro-num baro-num--sm">{fmtDate(siteStats.latestIncidentDate)}</span>
+        <span class="baro-lbl">dernier incident</span>
+      </div>
+    </div>
+
+    <!-- Ligne 3 : derniers incidents -->
+    <div class="baro-recent">
+      <div class="baro-recent-title">Derniers incidents recensés</div>
+      <ul class="baro-recent-list">
+        {siteStats.recentIncidents.map((i) => (
+          <li class="baro-recent-item">
+            <a href="/carte" class="baro-recent-link">
+              <span class="baro-recent-date">{fmtDate(i.date)}</span>
+              <span class="baro-recent-type">{incidentTypeLabels[i.type] ?? i.type}</span>
+              <span class="baro-recent-loc">{i.lieu}</span>
+            </a>
+          </li>
+        ))}
+      </ul>
+      <a href="/carte" class="baro-recent-all">Voir la carte complète →</a>
+    </div>
+  </section>
+
+  <!-- ════════ MOT DE BIENVENUE · ÉPINGLÉ EN HAUT ════════ -->
+  <div class="not-prose welcome-hero mb-12">
+    <span class="welcome-pin">📌 Épinglé · Lancement</span>
+    <div class="welcome-kicker">Bienvenue · Lancement fin juin 2026</div>
+    <p class="welcome-lead">
+      Ce site ouvre ses portes à la fin du mois de juin 2026. C'est une première version, entièrement neuve, construite par le mouvement et pour le mouvement.
+    </p>
+    <p class="welcome-body">
+      Nous y portons le plus grand soin, mais nous tenons à être clairs : ce projet reste expérimental. Il est ouvert à la contribution, et tout ce qui s'y trouve demeure potentiellement corrigible et optimisable. Une donnée peut être incomplète, une page peut évoluer, une analyse peut être affinée. Si vous repérez une erreur ou une piste d'amélioration, dites-le nous. C'est ainsi que cet outil gagnera en fiabilité.
+    </p>
+    <p class="welcome-body">
+      Nous espérons sincèrement qu'il sera utile. Qu'il aide à porter le mouvement, à protéger celles et ceux qui le font vivre, et à servir la cause d'une culture libre. C'est la seule raison d'être de ces pages.
+    </p>
+    <div class="flex flex-wrap gap-3 mt-7">
+      <a href="/contribuer" class="welcome-btn welcome-btn-primary no-underline">✦ Contribuer</a>
+      <a href="/reseaux" class="welcome-btn no-underline">▸ Nous suivre</a>
+    </div>
+  </div>
+
+  <!-- ════════ À LA UNE (posts détaillés) ════════ -->
+  <div class="not-prose flex flex-col gap-6 mb-12">
+    {actuPosts.map(post => (
+      <article class="border border-dedsec-border bg-dedsec-darker p-6 md:p-8" style={`border-top:2px solid ${accentOf(post.tag)};`}>
+        <div class="flex items-center gap-3 mb-3 flex-wrap">
+          <span
+            class="font-mono text-[10px] font-bold tracking-[0.2em] uppercase px-3 py-1"
+            style={`color:${accentOf(post.tag)};border:1px solid ${accentOf(post.tag)}55;background:${accentOf(post.tag)}12;`}
+          >{post.tag}</span>
+          <span class="font-mono text-[10px] tracking-widest uppercase text-dedsec-muted">{post.dateFR}</span>
+        </div>
+
+        <h2 class="text-dedsec-text font-bold mb-3" style="font-family:'Space Grotesk',sans-serif;font-size:21px;line-height:1.3;">{post.titre}</h2>
+
+        <p class="text-dedsec-text leading-relaxed mb-5" style={`font-family:'Space Grotesk',sans-serif;font-weight:600;border-left:3px solid ${accentOf(post.tag)};padding-left:14px;`}>{post.chapo}</p>
+
+        {post.corps.map(par => (
+          <p class="text-dedsec-text/90 leading-relaxed mb-4" style="font-family:'Space Grotesk',sans-serif;">{par}</p>
+        ))}
+
+        {post.encadre && (
+          <div class="my-5 p-4" style={`background:${accentOf(post.tag)}0d;border-left:3px solid ${accentOf(post.tag)};`}>
+            <div class="font-mono text-[10px] font-bold tracking-[0.2em] uppercase mb-2" style={`color:${accentOf(post.tag)};`}>{post.encadre.titre}</div>
+            <p class="text-dedsec-text/90 leading-relaxed m-0" style="font-family:'Space Grotesk',sans-serif;font-style:italic;">{post.encadre.texte}</p>
+          </div>
+        )}
+
+        {post.liens && (
+          <div class="flex flex-wrap gap-3 mt-5">
+            {post.liens.map(l => (
+              <a href={l.href} class="inline-flex items-center gap-2 font-mono text-[11px] font-bold tracking-widest no-underline px-3 py-2 transition-all" style="border:1px solid rgba(0,255,159,0.4);color:rgba(0,255,159,0.9);">▸ {l.label}</a>
+            ))}
+          </div>
+        )}
+
+        {post.source && (
+          <p class="text-[11px] text-dedsec-muted/70 font-mono mt-5 m-0">
+            Source : <a href={post.source.url} target="_blank" rel="noopener" class="text-neon-green/70 hover:text-neon-green">{post.source.label} ↗</a>
+          </p>
+        )}
+      </article>
+    ))}
+  </div>
+
+  <!-- ════════ LE FIL ════════ -->
+  <h2>Le fil d'actualité</h2>
+  <p>
+    Voici, repris une à une, toutes les informations qui défilent dans la bannière de l'accueil. Le fil est mis à jour au rythme du projet.
+  </p>
+
+  <div class="not-prose flex flex-col gap-px bg-dedsec-border my-6">
+    {items.map(item => (
+      <div class="bg-dedsec-darker p-5 flex flex-col sm:flex-row sm:items-center gap-3" style={`border-left:3px solid ${accentOf(item.tag)};`}>
+        <span
+          class="font-mono text-[10px] font-bold tracking-[0.18em] uppercase px-3 py-1 self-start whitespace-nowrap"
+          style={`color:${accentOf(item.tag)};border:1px solid ${accentOf(item.tag)}55;background:${accentOf(item.tag)}12;`}
+        >{item.tag}</span>
+        <span class="font-mono text-[12.5px] text-dedsec-text/85 leading-relaxed">{item.body}</span>
+      </div>
+    ))}
+  </div>
+
+  <p class="text-[11px] text-dedsec-muted/60 font-mono mt-8">
+    Pour nous écrire, utilisez le formulaire de la page <a href="/contact" class="text-neon-green/70 hover:text-neon-green">contact</a> ou Signal (KernelRequiem.27). Voir aussi la page <a href="/reseaux" class="text-neon-green/70 hover:text-neon-green">réseaux sociaux</a>.
+  </p>
+
+</Layout>
+
+<style>
+  /* ════════ BAROMÈTRE ════════ */
+  .baro {
+    border: 1px solid rgba(0, 255, 159, 0.3);
+    border-left: 3px solid #00ff9f;
+    background: linear-gradient(180deg, rgba(0,255,159,0.05), rgba(8,8,12,0.4));
+    border-radius: 4px;
+    padding: 18px 20px 20px;
+  }
+  .baro-head { display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 8px; margin-bottom: 14px; }
+  .baro-live { display: inline-flex; align-items: center; gap: 7px; font-family: 'JetBrains Mono', monospace; font-size: 9px; font-weight: 700; letter-spacing: 0.2em; color: #00ff9f; }
+  .baro-live-dot { width: 6px; height: 6px; border-radius: 50%; background: #00ff9f; box-shadow: 0 0 6px #00ff9f; animation: baro-pulse 2s ease-in-out infinite; }
+  @keyframes baro-pulse { 0%,100%{opacity:1} 50%{opacity:.4} }
+  .baro-checked { font-family: 'JetBrains Mono', monospace; font-size: 9.5px; letter-spacing: 0.05em; color: rgba(122,122,138,0.85); }
+
+  /* Statut RIPOST */
+  .baro-ripost {
+    display: block; text-decoration: none;
+    border: 1px solid rgba(255,214,0,0.3); border-left: 3px solid rgba(255,200,0,0.7);
+    background: rgba(255,230,0,0.04); padding: 12px 14px; margin-bottom: 12px;
+    transition: background 0.15s;
+  }
+  .baro-ripost:hover { background: rgba(255,230,0,0.07); }
+  .baro-ripost.is-inforce { border-color: rgba(255,68,68,0.35); border-left-color: #ff4444; background: rgba(255,68,68,0.05); }
+  .baro-ripost-tag { display: block; font-family: 'JetBrains Mono', monospace; font-size: 10px; font-weight: 700; letter-spacing: 0.12em; color: #ffd600; margin-bottom: 4px; }
+  .baro-ripost.is-inforce .baro-ripost-tag { color: #ff6b6b; }
+  .baro-ripost-stage { display: block; font-family: 'Space Grotesk', sans-serif; font-size: 12.5px; line-height: 1.5; color: rgba(210,210,224,0.9); }
+
+  /* Chiffres clés */
+  .baro-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 1px; background: rgba(42,42,58,0.6); border: 1px solid rgba(42,42,58,0.6); margin-bottom: 14px; }
+  .baro-stat { display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 4px; padding: 14px 8px; background: rgba(8,8,12,0.85); text-decoration: none; transition: background 0.15s; }
+  a.baro-stat:hover { background: rgba(0,255,159,0.06); }
+  .baro-num { font-family: 'JetBrains Mono', monospace; font-size: 24px; font-weight: 700; color: #00ff9f; line-height: 1; }
+  .baro-num--sm { font-size: 13px; color: #e8e8f0; }
+  .baro-lbl { font-family: 'JetBrains Mono', monospace; font-size: 8.5px; letter-spacing: 0.1em; text-transform: uppercase; color: rgba(122,122,138,0.85); text-align: center; line-height: 1.3; }
+
+  /* Derniers incidents */
+  .baro-recent-title { font-family: 'JetBrains Mono', monospace; font-size: 9px; font-weight: 700; letter-spacing: 0.2em; text-transform: uppercase; color: rgba(0,255,159,0.6); margin-bottom: 8px; }
+  .baro-recent-list { list-style: none; margin: 0; padding: 0; display: flex; flex-direction: column; gap: 1px; }
+  .baro-recent-item { margin: 0; }
+  .baro-recent-link { display: flex; align-items: baseline; gap: 10px; padding: 7px 10px; background: rgba(8,8,12,0.5); text-decoration: none; transition: background 0.15s; }
+  .baro-recent-link:hover { background: rgba(0,255,159,0.04); }
+  .baro-recent-date { flex-shrink: 0; font-family: 'JetBrains Mono', monospace; font-size: 10px; color: rgba(122,122,138,0.9); min-width: 78px; }
+  .baro-recent-type { flex-shrink: 0; font-family: 'JetBrains Mono', monospace; font-size: 9px; letter-spacing: 0.06em; text-transform: uppercase; color: rgba(0,255,159,0.7); min-width: 110px; }
+  .baro-recent-loc { font-family: 'Space Grotesk', sans-serif; font-size: 12.5px; color: rgba(210,210,224,0.88); }
+  .baro-recent-all { display: inline-block; margin-top: 10px; font-family: 'JetBrains Mono', monospace; font-size: 10.5px; font-weight: 700; color: rgba(0,255,159,0.85); text-decoration: none; }
+  .baro-recent-all:hover { color: #00ff9f; }
+
+  @media (max-width: 600px) {
+    .baro-grid { grid-template-columns: repeat(2, 1fr); }
+    .baro-recent-link { flex-wrap: wrap; gap: 4px 10px; }
+    .baro-recent-type { min-width: 0; }
+  }
+
+  /* Mot de bienvenue / lancement : habillage doré, épinglé en haut */
+  .welcome-hero {
+    position: relative;
+    padding: 34px 32px;
+    border: 1px solid rgba(227, 179, 65, 0.35);
+    border-top: 3px solid rgba(227, 179, 65, 0.85);
+    background:
+      radial-gradient(130% 120% at 0% 0%, rgba(227, 179, 65, 0.12) 0%, transparent 60%),
+      linear-gradient(180deg, rgba(227, 179, 65, 0.06), rgba(8, 8, 12, 0.5));
+    box-shadow: 0 10px 48px rgba(227, 179, 65, 0.08);
+    overflow: hidden;
+  }
+  .welcome-hero::after {
+    content: "";
+    position: absolute;
+    top: 0;
+    left: -60%;
+    width: 45%;
+    height: 100%;
+    background: linear-gradient(105deg, transparent 0%, rgba(255, 238, 180, 0.13) 50%, transparent 100%);
+    transform: skewX(-18deg);
+    animation: welcome-sheen 6.5s ease-in-out infinite;
+    pointer-events: none;
+  }
+  @keyframes welcome-sheen {
+    0% { left: -60%; }
+    55%, 100% { left: 135%; }
+  }
+  .welcome-pin {
+    position: relative;
+    z-index: 1;
+    display: inline-block;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 10px;
+    font-weight: 700;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    color: #0a0a0f;
+    background: #e3b341;
+    padding: 4px 11px;
+    margin-bottom: 18px;
+    box-shadow: 0 0 14px rgba(227, 179, 65, 0.4);
+  }
+  .welcome-kicker {
+    position: relative;
+    z-index: 1;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 13px;
+    font-weight: 700;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    background: linear-gradient(90deg, #b8860b, #f7e08a, #e3b341, #fff3c0, #e3b341);
+    background-size: 200% auto;
+    -webkit-background-clip: text;
+    background-clip: text;
+    -webkit-text-fill-color: transparent;
+    color: transparent;
+    animation: welcome-shimmer 4s linear infinite;
+    margin-bottom: 18px;
+  }
+  @keyframes welcome-shimmer { to { background-position: 200% center; } }
+  .welcome-lead {
+    position: relative;
+    z-index: 1;
+    font-family: 'Space Grotesk', sans-serif;
+    font-size: clamp(20px, 2.8vw, 30px);
+    font-weight: 600;
+    line-height: 1.4;
+    letter-spacing: -0.01em;
+    color: #f4e8c4;
+    margin: 0 0 22px;
+  }
+  .welcome-body {
+    position: relative;
+    z-index: 1;
+    font-family: 'Space Grotesk', sans-serif;
+    font-size: clamp(15px, 1.5vw, 17px);
+    line-height: 1.78;
+    color: rgba(238, 228, 200, 0.88);
+    margin: 0 0 16px;
+  }
+  .welcome-body:last-of-type { margin-bottom: 0; }
+  .welcome-btn {
+    position: relative;
+    z-index: 1;
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 12px;
+    font-weight: 700;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    padding: 11px 18px;
+    border: 1px solid rgba(227, 179, 65, 0.5);
+    color: rgba(242, 230, 198, 0.95);
+    transition: background 0.15s, color 0.15s;
+  }
+  .welcome-btn:hover { background: rgba(227, 179, 65, 0.12); }
+  .welcome-btn-primary { background: #e3b341; color: #0a0a0f; border-color: #e3b341; }
+  .welcome-btn-primary:hover { background: #f0c659; color: #0a0a0f; }
+
+  @media (prefers-reduced-motion: reduce) {
+    .welcome-hero::after, .welcome-kicker { animation: none; }
+    .welcome-kicker { color: #e3b341; -webkit-text-fill-color: #e3b341; }
+  }
+</style>

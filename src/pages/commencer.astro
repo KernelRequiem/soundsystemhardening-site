@@ -1,0 +1,656 @@
+---
+import Layout from '../layouts/Layout.astro';
+import Icon from '../components/Icon.astro';
+
+// Parcours selon la situation : chaque carte mene la ou il faut commencer.
+const paths = [
+  {
+    tag: 'URGENCE',
+    crit: true,
+    icon: '▲',
+    title: "Je suis en difficulté maintenant",
+    body: "Contrôle, fouille, interpellation, saisie. Les réflexes immédiats, puis un guidage étape par étape.",
+    steps: [
+      { label: 'Urgence', href: '/urgence' },
+      { label: 'Arbre de décision', href: '/decision' },
+    ],
+  },
+  {
+    tag: 'PRÉPARER',
+    icon: '◆',
+    title: "Je prépare un événement",
+    body: "Zones grises, dossier de sécurité, placement du son. Anticiper plutôt que subir.",
+    steps: [
+      { label: 'Modus Operandi', href: '/wiki/Modus-Operandi' },
+      { label: 'Compliance-Shield', href: '/compliance-shield' },
+      { label: 'SoundCheck', href: '/soundcheck' },
+    ],
+  },
+  {
+    tag: 'COMPRENDRE',
+    icon: '◈',
+    title: "Je veux comprendre la loi RIPOST",
+    body: "Le texte décrypté sans jargon, puis les parades concrètes pour y répondre.",
+    steps: [
+      { label: 'RIPOST', href: '/wiki/ripost' },
+      { label: 'Guide de résistance', href: '/wiki/Strategie-contre-ripost' },
+    ],
+  },
+  {
+    tag: 'PROTÉGER',
+    icon: '◎',
+    title: "Je veux protéger mes données",
+    body: "Définir d'abord contre qui se protéger, puis chiffrer, anonymiser, cloisonner.",
+    steps: [
+      { label: 'Modèle de menace', href: '/wiki/threat-model' },
+      { label: 'Cyber-OpSec', href: '/wiki/Sécurite-Numerique' },
+    ],
+  },
+];
+
+// Les outils, regroupes par moment d'usage.
+const toolGroups = [
+  {
+    moment: 'TERRAIN · sur le moment',
+    tools: [
+      { icon: 'urgence', name: 'Urgence', href: '/urgence', crit: true, desc: "Les réflexes en 10 secondes sous pression : quoi dire, quoi faire, quoi refuser." },
+      { icon: 'decision', name: 'Arbre de décision', href: '/decision', desc: "Réponds à des questions simples, l'outil te dit tes droits et la marche à suivre." },
+    ],
+  },
+  {
+    moment: 'PRÉPARATION · avant',
+    tools: [
+      { icon: 'soundcheck', name: 'SoundCheck', href: '/soundcheck', beta: true, desc: "Place ton mur de son sur une carte : jusqu'où le son porte, comment le relief le masque." },
+      { icon: 'shield_check', name: 'Compliance-Shield', href: '/compliance-shield', desc: "Génère un dossier de sécurité PDF à remettre aux forces de l'ordre." },
+      { icon: 'opsec', name: 'OpSec Tools', href: '/opsec-tools', desc: "Modèle de menace personnalisé + répartition du matériel contre la saisie." },
+    ],
+  },
+  {
+    moment: 'PREUVE & DONNÉES · après',
+    tools: [
+      { icon: 'timeseal', name: 'TimeSeal', href: '/timeseal', desc: "Manifeste de saisie horodaté localement : une preuve datée pour un recours." },
+      { icon: 'infocrypt', name: 'InfoCrypt', href: '/infocrypt', desc: "Chiffre une fiche sensible avec un mot de passe. Illisible sans la clé." },
+      { icon: 'stripmeta', name: 'StripMeta', href: '/stripmeta', desc: "Retire les métadonnées cachées d'une image (GPS, date) avant de la partager." },
+      { icon: 'copwatch', name: 'CopWatch', href: '/copwatch', desc: "Observatoire sourcé des tactiques policières observées contre le mouvement." },
+    ],
+  },
+];
+
+// Comment lire une fiche wiki : anatomie en 3 reperes.
+const anatomy = [
+  { n: '01', t: "L'encart en tête", d: "Résumé, statut et date de mise à jour. Une phrase pour savoir si la page répond à ton besoin." },
+  { n: '02', t: 'La section « En bref »', d: "Les points essentiels en liste. Si tu es pressé, elle suffit souvent." },
+  { n: '03', t: 'Les liens', d: "Les fiches sont reliées entre elles. Suis les liens pour approfondir un point." },
+];
+---
+
+<Layout
+  title="Commencer ici"
+  description="Le guide d'entrée de SoundSystemHardening : comment fonctionne le site, comment lire le wiki et utiliser chaque outil. Trouve par où commencer selon ta situation."
+  category="DÉMARRER"
+>
+
+  <!-- ═══════════ HERO ═══════════ -->
+  <section class="cmc-hero reveal">
+    <div class="cmc-kicker"><span class="cmc-kicker-dot"></span>GUIDE D'ENTRÉE</div>
+    <h1 class="cmc-title">Commencer ici</h1>
+    <p class="cmc-lead">
+      Tu n'as pas besoin de connaître le plan du site. Pars de ta situation : on t'amène
+      directement aux bonnes ressources. Trois choses à retenir.
+    </p>
+    <div class="cmc-pillars">
+      <div class="cmc-pillar">
+        <span class="cmc-pillar-icon"><Icon name="wiki" size={24} /></span>
+        <span class="cmc-pillar-name">Le wiki</span>
+        <span class="cmc-pillar-desc">L'information</span>
+      </div>
+      <div class="cmc-pillar">
+        <span class="cmc-pillar-icon"><Icon name="tools" size={24} /></span>
+        <span class="cmc-pillar-name">Les outils</span>
+        <span class="cmc-pillar-desc">Les actions, dans ton navigateur</span>
+      </div>
+      <div class="cmc-pillar">
+        <span class="cmc-pillar-icon"><Icon name="map" size={24} /></span>
+        <span class="cmc-pillar-name">La carte</span>
+        <span class="cmc-pillar-desc">Les incidents documentés</span>
+      </div>
+    </div>
+  </section>
+
+  <!-- ═══════════ PARCOURS SELON SITUATION ═══════════ -->
+  <section class="cmc-section">
+    <div class="cmc-divider reveal">
+      <span class="cmc-divider-num">01</span>
+      <span class="cmc-divider-label">Par où commencer selon ta situation</span>
+      <span class="cmc-divider-line"></span>
+    </div>
+
+    <div class="cmc-paths">
+      {paths.map((p, i) => (
+        <div class={`cmc-path reveal ${p.crit ? 'cmc-path--crit' : ''}`} data-reveal-delay={String((i % 3) + 1)}>
+          <div class="cmc-path-head">
+            <span class={`cmc-path-icon ${p.crit ? 'cmc-path-icon--crit' : ''}`}>{p.icon}</span>
+            <span class={`cmc-path-tag ${p.crit ? 'cmc-path-tag--crit' : ''}`}>{p.tag}</span>
+          </div>
+          <div class="cmc-path-title">{p.title}</div>
+          <p class="cmc-path-body">{p.body}</p>
+          <div class="cmc-path-steps">
+            {p.steps.map((s, j) => (
+              <>
+                {j > 0 && <span class="cmc-step-arrow">→</span>}
+                <a href={s.href} class="cmc-step">{s.label}</a>
+              </>
+            ))}
+          </div>
+        </div>
+      ))}
+    </div>
+  </section>
+
+  <!-- ═══════════ LES OUTILS ═══════════ -->
+  <section class="cmc-section">
+    <div class="cmc-divider reveal">
+      <span class="cmc-divider-num">02</span>
+      <span class="cmc-divider-label">Les outils, expliqués simplement</span>
+      <span class="cmc-divider-line"></span>
+    </div>
+    <p class="cmc-section-intro reveal">
+      Les outils ne sont pas de la lecture : ce sont des actions que tu exécutes. Tous tournent
+      <strong>entièrement dans ton navigateur</strong>, aucune donnée ne part sur Internet.
+    </p>
+
+    {toolGroups.map(g => (
+      <div class="cmc-tool-group">
+        <div class="cmc-tool-moment reveal">{g.moment}</div>
+        <div class="cmc-tools">
+          {g.tools.map((t, i) => (
+            <a href={t.href} class={`cmc-tool reveal ${t.crit ? 'cmc-tool--crit' : ''}`} data-reveal-delay={String((i % 3) + 1)}>
+              <span class={`cmc-tool-icon ${t.crit ? 'cmc-tool-icon--crit' : ''}`}><Icon name={t.icon} size={22} /></span>
+              <div class="cmc-tool-body">
+                <div class="cmc-tool-name">{t.name}{t.beta && <span class="cmc-tool-beta">Bêta</span>}<span class="cmc-tool-arrow">→</span></div>
+                <div class="cmc-tool-desc">{t.desc}</div>
+              </div>
+            </a>
+          ))}
+        </div>
+      </div>
+    ))}
+  </section>
+
+  <!-- ═══════════ LIRE LE WIKI ═══════════ -->
+  <section class="cmc-section">
+    <div class="cmc-divider reveal">
+      <span class="cmc-divider-num">03</span>
+      <span class="cmc-divider-label">Comment lire le wiki</span>
+      <span class="cmc-divider-line"></span>
+    </div>
+
+    <div class="cmc-anatomy">
+      {anatomy.map((a, i) => (
+        <div class="cmc-anat reveal" data-reveal-delay={String((i % 3) + 1)}>
+          <span class="cmc-anat-num">{a.n}</span>
+          <div class="cmc-anat-title">{a.t}</div>
+          <p class="cmc-anat-desc">{a.d}</p>
+        </div>
+      ))}
+    </div>
+
+    <div class="cmc-find reveal">
+      <div class="cmc-find-label">Trouver une info précise</div>
+      <div class="cmc-find-rows">
+        <div class="cmc-find-row"><kbd>/</kbd><span><strong>Recherche</strong> (ou l'icône loupe en haut) : cherche dans tout le wiki en temps réel. Le plus rapide.</span></div>
+        <div class="cmc-find-row"><span class="cmc-find-ic">☰</span><span><strong>Barre latérale</strong> : pour explorer un thème sans mot-clé précis.</span></div>
+        <div class="cmc-find-row"><span class="cmc-find-ic">▤</span><span><strong>Index du wiki</strong> : la vue complète, pour découvrir ce qui existe.</span></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ═══════════ VIE PRIVÉE ═══════════ -->
+  <section class="cmc-section">
+    <div class="cmc-privacy reveal">
+      <div class="cmc-privacy-head">
+        <span class="cmc-privacy-icon">⊘</span>
+        <span class="cmc-privacy-title">Ce que le site sait de toi : rien</span>
+      </div>
+      <p class="cmc-privacy-body">
+        Site statique, aucun cookie, aucun outil d'analyse, aucun script tiers sur les pages wiki,
+        aucun compte. Les outils s'exécutent chez toi. Ton fournisseur d'accès voit seulement que
+        tu te connectes à ce domaine, comme pour n'importe quel site. Pour les sujets sensibles,
+        passe par <strong>Tor</strong> ou un <strong>VPN</strong>.
+      </p>
+      <a href="/faq#privacy" class="cmc-privacy-link">Tout savoir sur la vie privée →</a>
+    </div>
+  </section>
+
+  <!-- ═══════════ CTA FINAL ═══════════ -->
+  <section class="cmc-final reveal">
+    <div class="cmc-final-label">Prêt ?</div>
+    <p class="cmc-final-text">Choisis ton point de départ.</p>
+    <div class="cmc-final-cta">
+      <a href="/wiki" class="cmc-btn cmc-btn--primary"><Icon name="wiki" size={16} /> Explorer le wiki</a>
+      <a href="/urgence" class="cmc-btn cmc-btn--crit"><Icon name="urgence" size={16} /> Page Urgence</a>
+      <a href="/contribuer" class="cmc-btn"><Icon name="contribute" size={16} /> Contribuer</a>
+    </div>
+  </section>
+
+</Layout>
+
+<style>
+  /* ════════ COMMENCER ICI : page guide sur-mesure (DA du site) ════════ */
+
+  .cmc-section { margin-bottom: clamp(48px, 6vw, 72px); }
+
+  /* ── HERO ── */
+  .cmc-hero {
+    position: relative;
+    text-align: center;
+    padding: 8px 0 36px;
+    margin-bottom: clamp(40px, 5vw, 60px);
+    border-bottom: 1px solid rgba(42, 42, 58, 0.4);
+  }
+  .cmc-kicker {
+    display: inline-flex;
+    align-items: center;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: 0.26em;
+    text-transform: uppercase;
+    color: rgba(0, 255, 159, 0.75);
+    margin-bottom: 18px;
+  }
+  .cmc-kicker-dot {
+    width: 6px; height: 6px; border-radius: 50%;
+    background: #00ff9f; box-shadow: 0 0 6px #00ff9f;
+    margin-right: 9px;
+    animation: ssh-footer-pulse 2s ease-in-out infinite;
+  }
+  .cmc-title {
+    font-family: 'Space Grotesk', sans-serif;
+    font-weight: 800;
+    font-size: clamp(40px, 8vw, 76px);
+    line-height: 0.95;
+    letter-spacing: -0.02em;
+    text-transform: uppercase;
+    color: #e8e8f0;
+    margin: 0 0 20px;
+  }
+  .cmc-lead {
+    font-family: 'Space Grotesk', sans-serif;
+    font-size: clamp(15px, 2.2vw, 18px);
+    line-height: 1.6;
+    color: rgba(232, 232, 240, 0.7);
+    max-width: 620px;
+    margin: 0 auto 32px;
+  }
+  .cmc-pillars {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 12px;
+  }
+  .cmc-pillar {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 4px;
+    min-width: 150px;
+    flex: 1;
+    max-width: 200px;
+    padding: 18px 14px;
+    border: 1px solid rgba(42, 42, 58, 0.7);
+    border-top: 2px solid rgba(0, 255, 159, 0.4);
+    border-radius: 4px;
+    background: linear-gradient(180deg, rgba(0,255,159,0.025), rgba(8,8,12,0.4));
+  }
+  .cmc-pillar-icon { font-size: 22px; color: rgba(0, 255, 159, 0.85); line-height: 1; }
+  .cmc-pillar-name {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 19px; letter-spacing: 0.05em;
+    color: #e8e8f0;
+  }
+  .cmc-pillar-desc {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 9.5px; letter-spacing: 0.06em;
+    color: rgba(122, 122, 138, 0.85);
+    text-align: center;
+  }
+
+  /* ── DIVIDER NUMÉROTÉ ── */
+  .cmc-divider {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    margin-bottom: 26px;
+  }
+  .cmc-divider-num {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 13px; font-weight: 700;
+    color: rgba(0, 255, 159, 0.5);
+    letter-spacing: 0.1em;
+  }
+  .cmc-divider-label {
+    font-family: 'Space Grotesk', sans-serif;
+    font-size: clamp(18px, 3vw, 24px);
+    font-weight: 700;
+    color: #e8e8f0;
+  }
+  .cmc-divider-line {
+    flex: 1; height: 1px;
+    background: linear-gradient(90deg, rgba(0,255,159,0.3), transparent);
+  }
+  .cmc-section-intro {
+    font-family: 'Space Grotesk', sans-serif;
+    font-size: 15px; line-height: 1.65;
+    color: rgba(232, 232, 240, 0.72);
+    max-width: 680px;
+    margin: 0 0 28px;
+  }
+  .cmc-section-intro strong { color: #00ff9f; font-weight: 600; }
+
+  /* ── PARCOURS (cartes situation) ── */
+  .cmc-paths {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 14px;
+  }
+  .cmc-path {
+    display: flex;
+    flex-direction: column;
+    padding: 22px 24px;
+    border: 1px solid rgba(42, 42, 58, 0.7);
+    border-left: 2px solid rgba(0, 255, 159, 0.45);
+    border-radius: 4px;
+    background: linear-gradient(135deg, rgba(0,255,159,0.02), rgba(8,8,12,0.4));
+    transition: transform 0.18s ease, border-color 0.2s ease, background 0.2s ease;
+  }
+  .cmc-path:hover {
+    transform: translateY(-3px);
+    border-left-color: #00ff9f;
+    background: linear-gradient(135deg, rgba(0,255,159,0.05), rgba(8,8,12,0.4));
+  }
+  .cmc-path--crit { border-left-color: rgba(255, 68, 68, 0.6); }
+  .cmc-path--crit:hover { border-left-color: #ff4444; background: linear-gradient(135deg, rgba(255,68,68,0.05), rgba(8,8,12,0.4)); }
+  .cmc-path-head {
+    display: flex; align-items: center; gap: 11px;
+    margin-bottom: 12px;
+  }
+  .cmc-path-icon {
+    font-size: 18px; line-height: 1;
+    color: rgba(0, 255, 159, 0.8);
+  }
+  .cmc-path-icon--crit { color: rgba(255, 92, 92, 0.9); }
+  .cmc-path-tag {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 9.5px; font-weight: 700;
+    letter-spacing: 0.2em; text-transform: uppercase;
+    color: rgba(0, 255, 159, 0.65);
+  }
+  .cmc-path-tag--crit { color: rgba(255, 92, 92, 0.85); }
+  .cmc-path-title {
+    font-family: 'Space Grotesk', sans-serif;
+    font-size: 17px; font-weight: 600;
+    color: #e8e8f0;
+    margin-bottom: 8px;
+  }
+  .cmc-path-body {
+    font-family: 'Space Grotesk', sans-serif;
+    font-size: 13.5px; line-height: 1.6;
+    color: rgba(232, 232, 240, 0.6);
+    margin: 0 0 16px;
+    flex: 1;
+  }
+  .cmc-path-steps {
+    display: flex; flex-wrap: wrap; align-items: center; gap: 8px;
+  }
+  .cmc-step {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 11px; font-weight: 700;
+    letter-spacing: 0.04em;
+    color: rgba(0, 255, 159, 0.9);
+    text-decoration: none;
+    padding: 6px 12px;
+    border: 1px solid rgba(0, 255, 159, 0.25);
+    border-radius: 3px;
+    background: rgba(0, 255, 159, 0.04);
+    transition: background 0.15s, border-color 0.15s, transform 0.15s;
+  }
+  .cmc-step:hover {
+    background: rgba(0, 255, 159, 0.12);
+    border-color: rgba(0, 255, 159, 0.6);
+    transform: translateY(-1px);
+  }
+  .cmc-step-arrow { color: rgba(122, 122, 138, 0.6); font-family: 'JetBrains Mono', monospace; font-size: 12px; }
+
+  /* ── OUTILS ── */
+  .cmc-tool-group { margin-bottom: 28px; }
+  .cmc-tool-moment {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 10px; font-weight: 700;
+    letter-spacing: 0.2em; text-transform: uppercase;
+    color: rgba(0, 255, 159, 0.55);
+    padding-bottom: 9px;
+    margin-bottom: 14px;
+    border-bottom: 1px solid rgba(42, 42, 58, 0.5);
+  }
+  .cmc-tools {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 12px;
+  }
+  .cmc-tool {
+    display: flex; gap: 14px;
+    padding: 16px 18px;
+    border: 1px solid rgba(42, 42, 58, 0.6);
+    border-radius: 4px;
+    background: rgba(8, 8, 12, 0.4);
+    text-decoration: none;
+    transition: transform 0.15s ease, border-color 0.2s ease, background 0.2s ease;
+  }
+  .cmc-tool:hover {
+    transform: translateY(-2px);
+    border-color: rgba(0, 255, 159, 0.4);
+    background: rgba(0, 255, 159, 0.03);
+  }
+  .cmc-tool--crit:hover { border-color: rgba(255, 68, 68, 0.4); background: rgba(255, 68, 68, 0.03); }
+  .cmc-tool-icon {
+    font-size: 22px; line-height: 1;
+    color: rgba(0, 255, 159, 0.7);
+    flex-shrink: 0;
+    width: 26px; text-align: center;
+  }
+  .cmc-tool-icon--crit { color: rgba(255, 92, 92, 0.85); }
+  .cmc-tool-name {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 13px; font-weight: 700;
+    letter-spacing: 0.06em;
+    color: #e8e8f0;
+    margin-bottom: 5px;
+    display: flex; align-items: center; gap: 6px;
+  }
+  .cmc-tool-beta {
+    font-size: 8.5px;
+    font-weight: 700;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: rgba(227, 179, 65, 0.95);
+    border: 1px solid rgba(227, 179, 65, 0.35);
+    background: rgba(227, 179, 65, 0.06);
+    border-radius: 999px;
+    padding: 1px 7px;
+  }
+  .cmc-tool-arrow {
+    margin-left: auto;
+    color: rgba(0, 255, 159, 0.5);
+    transition: transform 0.18s ease;
+  }
+  .cmc-tool:hover .cmc-tool-arrow { transform: translateX(3px); color: #00ff9f; }
+  .cmc-tool--crit:hover .cmc-tool-arrow { color: #ff5c5c; }
+  .cmc-tool-desc {
+    font-family: 'Space Grotesk', sans-serif;
+    font-size: 12.5px; line-height: 1.55;
+    color: rgba(232, 232, 240, 0.6);
+  }
+
+  /* ── ANATOMIE WIKI ── */
+  .cmc-anatomy {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 14px;
+    margin-bottom: 22px;
+  }
+  .cmc-anat {
+    padding: 20px 22px;
+    border: 1px solid rgba(42, 42, 58, 0.6);
+    border-radius: 4px;
+    background: rgba(8, 8, 12, 0.4);
+  }
+  .cmc-anat-num {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 22px; font-weight: 700;
+    color: rgba(0, 255, 159, 0.35);
+    line-height: 1;
+    display: block;
+    margin-bottom: 10px;
+  }
+  .cmc-anat-title {
+    font-family: 'Space Grotesk', sans-serif;
+    font-size: 15px; font-weight: 600;
+    color: #e8e8f0;
+    margin-bottom: 7px;
+  }
+  .cmc-anat-desc {
+    font-family: 'Space Grotesk', sans-serif;
+    font-size: 13px; line-height: 1.55;
+    color: rgba(232, 232, 240, 0.6);
+    margin: 0;
+  }
+
+  /* ── TROUVER UNE INFO ── */
+  .cmc-find {
+    padding: 22px 24px;
+    border: 1px solid rgba(42, 42, 58, 0.6);
+    border-radius: 4px;
+    background: rgba(8, 8, 12, 0.4);
+  }
+  .cmc-find-label {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 10px; font-weight: 700;
+    letter-spacing: 0.2em; text-transform: uppercase;
+    color: rgba(0, 255, 159, 0.6);
+    margin-bottom: 16px;
+  }
+  .cmc-find-rows { display: flex; flex-direction: column; gap: 12px; }
+  .cmc-find-row {
+    display: flex; align-items: center; gap: 14px;
+    font-family: 'Space Grotesk', sans-serif;
+    font-size: 13.5px; line-height: 1.5;
+    color: rgba(232, 232, 240, 0.7);
+  }
+  .cmc-find-row strong { color: #e8e8f0; font-weight: 600; }
+  .cmc-find-row kbd {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 12px; font-weight: 700;
+    color: #00ff9f;
+    border: 1px solid rgba(0, 255, 159, 0.35);
+    border-radius: 3px;
+    padding: 3px 9px;
+    background: rgba(0, 255, 159, 0.05);
+    flex-shrink: 0;
+    min-width: 28px; text-align: center;
+  }
+  .cmc-find-ic {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 14px;
+    color: rgba(0, 255, 159, 0.7);
+    flex-shrink: 0;
+    min-width: 28px; text-align: center;
+  }
+
+  /* ── VIE PRIVÉE ── */
+  .cmc-privacy {
+    padding: 26px 28px;
+    border: 1px solid rgba(42, 42, 58, 0.7);
+    border-left: 2px solid rgba(0, 255, 159, 0.4);
+    border-radius: 4px;
+    background: linear-gradient(135deg, rgba(0,255,159,0.03), rgba(8,8,12,0.4));
+  }
+  .cmc-privacy-head {
+    display: flex; align-items: center; gap: 12px;
+    margin-bottom: 12px;
+  }
+  .cmc-privacy-icon { font-size: 22px; color: rgba(0, 255, 159, 0.8); line-height: 1; }
+  .cmc-privacy-title {
+    font-family: 'Space Grotesk', sans-serif;
+    font-size: 18px; font-weight: 700;
+    color: #e8e8f0;
+  }
+  .cmc-privacy-body {
+    font-family: 'Space Grotesk', sans-serif;
+    font-size: 14px; line-height: 1.65;
+    color: rgba(232, 232, 240, 0.68);
+    margin: 0 0 14px;
+  }
+  .cmc-privacy-body strong { color: #00ff9f; font-weight: 600; }
+  .cmc-privacy-link {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 11px; font-weight: 700;
+    letter-spacing: 0.06em;
+    color: rgba(0, 255, 159, 0.9);
+    text-decoration: none;
+    transition: color 0.15s;
+  }
+  .cmc-privacy-link:hover { color: #00ff9f; }
+
+  /* ── CTA FINAL ── */
+  .cmc-final {
+    text-align: center;
+    padding: 40px 24px 8px;
+    border-top: 1px solid rgba(42, 42, 58, 0.4);
+  }
+  .cmc-final-label {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 11px; font-weight: 700;
+    letter-spacing: 0.24em; text-transform: uppercase;
+    color: rgba(0, 255, 159, 0.7);
+    margin-bottom: 10px;
+  }
+  .cmc-final-text {
+    font-family: 'Space Grotesk', sans-serif;
+    font-size: clamp(20px, 3vw, 26px);
+    font-weight: 600;
+    color: #e8e8f0;
+    margin: 0 0 26px;
+  }
+  .cmc-final-cta {
+    display: flex; flex-wrap: wrap; justify-content: center; gap: 13px;
+  }
+  .cmc-btn {
+    display: inline-flex; align-items: center; gap: 9px;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 12px; font-weight: 700;
+    letter-spacing: 0.12em; text-transform: uppercase;
+    text-decoration: none;
+    padding: 13px 22px;
+    border-radius: 3px;
+    border: 1px solid rgba(42, 42, 58, 0.9);
+    color: rgba(232, 232, 240, 0.9);
+    background: rgba(0, 255, 159, 0.04);
+    transition: transform 0.15s ease, border-color 0.2s, color 0.2s, background 0.2s;
+  }
+  .cmc-btn:hover { transform: translateY(-2px); border-color: rgba(0,255,159,0.5); color: #00ff9f; background: rgba(0,255,159,0.07); }
+  .cmc-btn--primary {
+    background: #00ff9f; color: #06120d; border-color: #00ff9f;
+    box-shadow: 0 0 0 1px rgba(0,255,159,0.4), 0 10px 30px -12px rgba(0,255,159,0.6);
+  }
+  .cmc-btn--primary:hover { color: #06120d; background: #00ff9f; box-shadow: 0 0 0 1px rgba(0,255,159,0.7), 0 14px 36px -12px rgba(0,255,159,0.8); }
+  .cmc-btn--crit { color: rgba(255, 120, 120, 0.95); border-color: rgba(255, 68, 68, 0.35); background: rgba(255,68,68,0.05); }
+  .cmc-btn--crit:hover { color: #ff6b6b; border-color: rgba(255,68,68,0.6); background: rgba(255,68,68,0.09); }
+
+  /* ── RESPONSIVE ── */
+  @media (max-width: 720px) {
+    .cmc-paths { grid-template-columns: 1fr; }
+    .cmc-tools { grid-template-columns: 1fr; }
+    .cmc-anatomy { grid-template-columns: 1fr; }
+  }
+</style>

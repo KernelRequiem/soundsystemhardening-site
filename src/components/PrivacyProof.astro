@@ -1,0 +1,255 @@
+---
+// Preuve "zéro tracking" en direct, AUDITABLE.
+// Le panneau n'affiche pas qu'un verdict : pour chaque test il montre (a) ce qu'il
+// inspecte exactement, (b) les données brutes trouvées dans TON navigateur. Tout
+// est calculé côté client, rien n'est envoyé. Objectif : confiance par la
+// vérifiabilité, pas par la parole. On distingue le pistage (données qui partent
+// vers un tiers) du stockage local same-origin (qui reste sur l'appareil, et n'est
+// donc pas du pistage).
+---
+
+<section class="pp" aria-labelledby="pp-title">
+  <div class="pp-head">
+    <span class="pp-dot" aria-hidden="true"></span>
+    <h2 id="pp-title" class="pp-title">Preuve en direct : ce site ne te piste pas</h2>
+  </div>
+  <p class="pp-intro">
+    Cet audit s'exécute dans <strong>ton</strong> navigateur, à l'instant, et n'envoie rien.
+    Chaque ligne indique <strong>ce qu'elle inspecte</strong> et <strong>ce qu'elle a trouvé</strong> :
+    déplie le détail, puis recoupe avec tes propres Outils de développement (onglets Application et Réseau).
+  </p>
+
+  <ul class="pp-list" id="pp-list">
+    <li class="pp-item" data-check="cookies">
+      <div class="pp-row">
+        <span class="pp-state" data-state="pending" aria-hidden="true">…</span>
+        <span class="pp-label">Cookies posés par le site</span>
+        <span class="pp-value" data-value>analyse…</span>
+      </div>
+      <button class="pp-toggle" type="button" hidden>voir le détail</button>
+      <div class="pp-detail" hidden>
+        <div class="pp-detail-method"><b>Méthode :</b> lecture de <code>document.cookie</code> (cookies accessibles en JS).</div>
+        <div class="pp-detail-data" data-detail></div>
+      </div>
+    </li>
+    <li class="pp-item" data-check="thirdparty">
+      <div class="pp-row">
+        <span class="pp-state" data-state="pending" aria-hidden="true">…</span>
+        <span class="pp-label">Requêtes vers des serveurs tiers</span>
+        <span class="pp-value" data-value>analyse…</span>
+      </div>
+      <button class="pp-toggle" type="button" hidden>voir le détail</button>
+      <div class="pp-detail" hidden>
+        <div class="pp-detail-method"><b>Méthode :</b> on parcourt <code>performance.getEntriesByType('resource')</code> (tout ce que la page a chargé) et on liste les domaines différents du nôtre.</div>
+        <div class="pp-detail-data" data-detail></div>
+      </div>
+    </li>
+    <li class="pp-item" data-check="scripts">
+      <div class="pp-row">
+        <span class="pp-state" data-state="pending" aria-hidden="true">…</span>
+        <span class="pp-label">Scripts chargés depuis l'extérieur</span>
+        <span class="pp-value" data-value>analyse…</span>
+      </div>
+      <button class="pp-toggle" type="button" hidden>voir le détail</button>
+      <div class="pp-detail" hidden>
+        <div class="pp-detail-method"><b>Méthode :</b> parmi les ressources ci-dessus, on isole celles de type <code>script</code> servies par un autre domaine.</div>
+        <div class="pp-detail-data" data-detail></div>
+      </div>
+    </li>
+    <li class="pp-item" data-check="storage">
+      <div class="pp-row">
+        <span class="pp-state" data-state="pending" aria-hidden="true">…</span>
+        <span class="pp-label">Stockage local sur ton appareil</span>
+        <span class="pp-value" data-value>analyse…</span>
+      </div>
+      <button class="pp-toggle" type="button" hidden>voir le détail</button>
+      <div class="pp-detail" hidden>
+        <div class="pp-detail-method">
+          <b>Méthode :</b> on liste les clés de <code>localStorage</code> et <code>sessionStorage</code>.
+          <span class="pp-detail-note">Ce stockage reste sur ton appareil (same-origin) et ne part jamais sur Internet : ce n'est pas du pistage, mais on te le montre quand même, par transparence. Il sert aux préférences et aux brouillons d'outils (ex. Compliance-Shield).</span>
+        </div>
+        <div class="pp-detail-data" data-detail></div>
+      </div>
+    </li>
+  </ul>
+
+  <div class="pp-actions">
+    <button class="pp-rerun" type="button" id="pp-rerun">↻ Relancer l'audit</button>
+    <p class="pp-foot" id="pp-foot" aria-live="polite"></p>
+  </div>
+</section>
+
+<script>
+  (function privacyProof() {
+    const root = document.getElementById('pp-list');
+    const foot = document.getElementById('pp-foot');
+    const rerun = document.getElementById('pp-rerun');
+    if (!root) return;
+
+    const host = location.hostname;
+    const esc = (s: string) =>
+      s.replace(/[&<>"]/g, (c) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[c] as string));
+
+    // tone: 'ok' (vert), 'warn' (rouge, vraie anomalie), 'info' (neutre, pas une alerte)
+    function setRow(check: string, tone: 'ok' | 'warn' | 'info', value: string, detailHtml: string) {
+      const item = root!.querySelector(`[data-check="${check}"]`);
+      if (!item) return;
+      const state = item.querySelector('.pp-state') as HTMLElement | null;
+      const val = item.querySelector('[data-value]') as HTMLElement | null;
+      const detail = item.querySelector('[data-detail]') as HTMLElement | null;
+      const toggle = item.querySelector('.pp-toggle') as HTMLButtonElement | null;
+      const glyph = tone === 'ok' ? '✓' : tone === 'warn' ? '⚠' : 'ℹ';
+      if (state) { state.dataset.state = tone; state.textContent = glyph; }
+      if (val) val.textContent = value;
+      item.classList.remove('is-ok', 'is-warn', 'is-info');
+      item.classList.add('is-' + tone);
+      if (detail) detail.innerHTML = detailHtml;
+      if (toggle) toggle.hidden = false;
+    }
+
+    function listOrEmpty(arr: string[], empty: string) {
+      if (!arr.length) return `<div class="pp-empty">${empty}</div>`;
+      return '<ul class="pp-raw">' + arr.map((x) => `<li>${esc(x)}</li>`).join('') + '</ul>';
+    }
+
+    function run() {
+      // 1) Cookies (lisibles en JS)
+      const cookieList = document.cookie ? document.cookie.split(';').map((c) => c.trim()).filter(Boolean) : [];
+      setRow('cookies', cookieList.length === 0 ? 'ok' : 'warn',
+        cookieList.length === 0 ? 'aucun (0)' : `${cookieList.length} détecté(s)`,
+        listOrEmpty(cookieList.map((c) => c.split('=')[0]), 'Aucun cookie lisible. document.cookie est vide.'));
+
+      // 2) & 3) Ressources réseau
+      const thirdHosts: string[] = [];
+      const extScriptUrls: string[] = [];
+      try {
+        const entries = performance.getEntriesByType('resource') as PerformanceResourceTiming[];
+        for (const e of entries) {
+          let h = '';
+          try { h = new URL(e.name).hostname; } catch { continue; }
+          if (!h || h === host || h.endsWith('.' + host)) continue;
+          if (!thirdHosts.includes(h)) thirdHosts.push(h);
+          if (e.initiatorType === 'script') extScriptUrls.push(e.name);
+        }
+      } catch {}
+      setRow('thirdparty', thirdHosts.length === 0 ? 'ok' : 'warn',
+        thirdHosts.length === 0 ? 'aucune (0)' : `${thirdHosts.length} domaine(s)`,
+        listOrEmpty(thirdHosts, `Toutes les ressources viennent de ${esc(host)}. Aucun domaine tiers contacté.`));
+      setRow('scripts', extScriptUrls.length === 0 ? 'ok' : 'warn',
+        extScriptUrls.length === 0 ? 'aucun (0)' : `${extScriptUrls.length} externe(s)`,
+        listOrEmpty(extScriptUrls, 'Tous les scripts sont servis par ce domaine. Aucun script tiers.'));
+
+      // 4) Stockage local same-origin : INFORMATIF, pas une alerte
+      const keys: string[] = [];
+      try { for (let i = 0; i < localStorage.length; i++) keys.push('localStorage · ' + (localStorage.key(i) || '')); } catch {}
+      try { for (let i = 0; i < sessionStorage.length; i++) keys.push('sessionStorage · ' + (sessionStorage.key(i) || '')); } catch {}
+      setRow('storage', 'info',
+        keys.length === 0 ? 'vide (0)' : `${keys.length} clé(s) locale(s)`,
+        listOrEmpty(keys, 'Aucune donnée stockée localement pour le moment.'));
+
+      // Verdict : seuls cookies / tiers / scripts comptent comme pistage.
+      const noTracking = cookieList.length === 0 && thirdHosts.length === 0 && extScriptUrls.length === 0;
+      if (foot) {
+        foot.textContent = noTracking
+          ? '✓ Aucun pistage sur cette page : 0 cookie, 0 tiers, 0 script externe. Le stockage local éventuel reste sur ton appareil.'
+          : 'Une ressource tierce est apparue sur cette page : signale-la nous, c\'est exactement ce qu\'on veut savoir.';
+        foot.dataset.state = noTracking ? 'ok' : 'warn';
+      }
+    }
+
+    // Dépliage du détail par ligne
+    root.addEventListener('click', (e) => {
+      const btn = (e.target as HTMLElement).closest('.pp-toggle') as HTMLButtonElement | null;
+      if (!btn) return;
+      const detail = btn.nextElementSibling as HTMLElement | null;
+      if (!detail) return;
+      const open = !detail.hidden;
+      detail.hidden = open;
+      btn.textContent = open ? 'voir le détail' : 'masquer le détail';
+    });
+
+    rerun?.addEventListener('click', run);
+    run();
+  })();
+</script>
+
+<style>
+  .pp {
+    border: 1px solid rgba(0, 255, 159, 0.3);
+    border-left: 3px solid #00ff9f;
+    background: linear-gradient(180deg, rgba(0,255,159,0.05), rgba(8,8,12,0.4));
+    border-radius: 4px;
+    padding: 20px 22px 22px;
+    margin: 1.5rem 0;
+  }
+  .pp-list { list-style: none !important; margin: 0; padding: 0; display: flex; flex-direction: column; gap: 1px; }
+  .pp-list li::before { content: none !important; }
+  .pp-list li { margin: 0 !important; }
+  .pp-title::before, .pp-title::after { content: none !important; }
+  .pp-title { padding: 0 !important; border: 0 !important; }
+
+  .pp-head { display: flex; align-items: center; gap: 10px; margin-bottom: 10px; }
+  .pp-dot {
+    width: 8px; height: 8px; border-radius: 50%;
+    background: #00ff9f; box-shadow: 0 0 8px #00ff9f;
+    animation: pp-pulse 2s ease-in-out infinite; flex-shrink: 0;
+  }
+  @keyframes pp-pulse { 0%,100%{opacity:1} 50%{opacity:.4} }
+  .pp-title { font-family: 'Space Grotesk', sans-serif; font-size: clamp(16px, 2.4vw, 19px); font-weight: 700; color: #e8e8f0; margin: 0; }
+  .pp-intro { font-family: 'JetBrains Mono', monospace; font-size: 11.5px; line-height: 1.6; color: rgba(122,122,138,0.95); margin: 0 0 16px; }
+  .pp-intro strong { color: rgba(232,232,240,0.9); }
+
+  .pp-item { background: rgba(8, 8, 12, 0.5); padding: 11px 12px; }
+  .pp-row { display: flex; align-items: center; gap: 12px; font-family: 'JetBrains Mono', monospace; font-size: 12.5px; }
+  .pp-state {
+    width: 20px; height: 20px; flex-shrink: 0;
+    display: flex; align-items: center; justify-content: center;
+    border-radius: 50%; font-size: 12px; font-weight: 700;
+  }
+  .pp-state[data-state="pending"] { color: rgba(122,122,138,0.6); }
+  .pp-state[data-state="ok"]   { color: #06120d; background: #00ff9f; }
+  .pp-state[data-state="warn"] { color: #fff; background: #ff4444; }
+  .pp-state[data-state="info"] { color: #06120d; background: rgba(122,138,180,0.85); }
+  .pp-label { flex: 1; color: rgba(232, 232, 240, 0.85); }
+  .pp-value { flex-shrink: 0; font-weight: 700; color: rgba(122, 122, 138, 0.8); text-align: right; }
+  .pp-item.is-ok .pp-value   { color: rgba(0, 255, 159, 0.95); }
+  .pp-item.is-warn .pp-value { color: #ff6b6b; }
+  .pp-item.is-info .pp-value { color: rgba(150, 165, 205, 0.95); }
+
+  .pp-toggle {
+    margin: 8px 0 0 32px; padding: 0; background: none; border: none; cursor: pointer;
+    font-family: 'JetBrains Mono', monospace; font-size: 10px; letter-spacing: 0.04em;
+    color: rgba(0, 255, 159, 0.7); text-decoration: underline; text-underline-offset: 3px;
+  }
+  .pp-toggle:hover { color: #00ff9f; }
+  .pp-detail {
+    margin: 8px 0 2px 32px; padding: 10px 12px;
+    border-left: 1px solid rgba(0,255,159,0.2); background: rgba(0,0,0,0.25);
+  }
+  .pp-detail-method { font-family: 'JetBrains Mono', monospace; font-size: 11px; line-height: 1.55; color: rgba(190,190,205,0.85); }
+  .pp-detail-method b { color: rgba(232,232,240,0.95); }
+  .pp-detail-method code { color: #00ff9f; font-size: 10.5px; background: rgba(0,255,159,0.07); padding: 1px 5px; border-radius: 2px; }
+  .pp-detail-note { display: block; margin-top: 6px; color: rgba(122,122,138,0.85); }
+  .pp-detail-data { margin-top: 8px; }
+  .pp-raw { list-style: none !important; margin: 0 !important; padding: 0 !important; display: flex; flex-direction: column; gap: 3px; }
+  .pp-raw li { margin: 0 !important; font-family: 'JetBrains Mono', monospace; font-size: 10.5px; color: rgba(232,232,240,0.8); word-break: break-all; }
+  .pp-raw li::before { content: '·' !important; color: rgba(0,255,159,0.5); margin-right: 6px; }
+  .pp-empty { font-family: 'JetBrains Mono', monospace; font-size: 10.5px; color: rgba(0,255,159,0.75); }
+
+  .pp-actions { display: flex; align-items: center; gap: 14px; flex-wrap: wrap; margin-top: 14px; }
+  .pp-rerun {
+    flex-shrink: 0; font-family: 'JetBrains Mono', monospace; font-size: 10px; font-weight: 700;
+    letter-spacing: 0.08em; text-transform: uppercase; cursor: pointer;
+    color: rgba(0,255,159,0.85); background: rgba(0,255,159,0.05);
+    border: 1px solid rgba(0,255,159,0.3); border-radius: 3px; padding: 7px 12px;
+    transition: all 0.15s;
+  }
+  .pp-rerun:hover { color: #00ff9f; border-color: rgba(0,255,159,0.6); background: rgba(0,255,159,0.09); }
+  .pp-foot { margin: 0; font-family: 'JetBrains Mono', monospace; font-size: 11px; line-height: 1.5; color: rgba(0, 255, 159, 0.85); }
+  .pp-foot[data-state="warn"] { color: #ff6b6b; }
+
+  @media (max-width: 520px) {
+    .pp-row { flex-wrap: wrap; }
+    .pp-value { width: 100%; text-align: left; padding-left: 32px; }
+  }
+</style>

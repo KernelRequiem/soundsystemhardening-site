@@ -1,0 +1,411 @@
+---
+import Layout from '../layouts/Layout.astro';
+---
+
+<Layout title="Contribuer" description="Comment contribuer au wiki SoundSystemHardening : dépôt anonyme en 2 clics, mode contributeur, GitHub, contact chiffré.">
+
+  <h1 class="mb-1">▸ CONTRIBUER</h1>
+  <p class="text-dedsec-muted text-sm mb-10 font-mono">Cette plateforme vit par ses contributions. Plusieurs voies, de la plus simple à la plus technique. Trois règles communes.</p>
+
+  <!-- RÈGLES -->
+  <section class="mb-12">
+    <div class="grid grid-cols-1 md:grid-cols-3 gap-3">
+      {[
+        { num: '01', label: 'SOURCER',    icon: '◎', desc: 'Toute affirmation factuelle doit être sourcée. Pas de rumeurs, pas d\'approximations.' },
+        { num: '02', label: 'ANONYMISER', icon: '◈', desc: 'Aucun nom réel, aucune donnée permettant d\'identifier des personnes ou des lieux précis.' },
+        { num: '03', label: 'VÉRIFIER',   icon: '◉', desc: 'Les informations juridiques doivent être relues par quelqu\'un avec des compétences légales.' },
+      ].map(r => (
+        <div class="card-neon px-5 py-5 flex flex-col gap-3">
+          <div class="flex items-center gap-3">
+            <span class="text-neon-green font-mono text-2xl leading-none">{r.icon}</span>
+            <div>
+              <div class="font-mono text-[9px] text-neon-green/40 tracking-widest">[{r.num}]</div>
+              <div class="font-mono text-sm text-neon-green font-bold tracking-widest">{r.label}</div>
+            </div>
+          </div>
+          <p class="text-dedsec-muted text-sm leading-relaxed m-0">{r.desc}</p>
+        </div>
+      ))}
+    </div>
+  </section>
+
+  <!-- VOIE 1, DÉPÔT ANONYME EN 2 CLICS (Dead Drop) -->
+  <section class="mb-12">
+    <div class="flex items-center gap-3 mb-2">
+      <h2 class="m-0">▸ LE PLUS SIMPLE : DÉPÔT ANONYME</h2>
+      <span class="font-mono text-[9px] text-neon-green border border-neon-green/40 px-2 py-0.5 tracking-widest">RECOMMANDÉ</span>
+    </div>
+    <p class="text-xs text-dedsec-muted font-mono mb-6">Sans compte. Sans trace côté site. Deux clics depuis n'importe quelle page.</p>
+
+    <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+
+      <!-- Bouton flottant -->
+      <div class="card-neon px-5 py-5 flex flex-col">
+        <div class="flex items-center gap-3 mb-4">
+          <span class="text-neon-green font-mono text-xl leading-none">&lt;/&gt;</span>
+          <div>
+            <div class="font-mono text-xs font-bold text-neon-green tracking-widest">BOUTON FLOTTANT</div>
+            <div class="text-dedsec-muted/60 text-[10px] font-mono">En bas à droite de chaque page</div>
+          </div>
+        </div>
+        <p class="text-dedsec-muted text-sm leading-relaxed m-0 mb-4">
+          Le bouton <span class="text-neon-green font-mono">[&lt;/&gt; CONTRIBUER]</span> ouvre un terminal sécurisé. Tu choisis le type (bug, apport juridique, idée), tu écris, tu envoies. Ta proposition devient un ticket privé que les mainteneurs traitent.
+        </p>
+        <div class="space-y-2 font-mono text-xs mb-2">
+          {[
+            ['01', 'Clique le bouton flottant', 'en bas à droite'],
+            ['02', 'Décris ta proposition', 'Markdown accepté'],
+            ['03', 'Envoie', 'preuve anti-spam automatique'],
+          ].map(([n, text, hl]) => (
+            <div class="flex gap-3 items-start">
+              <span class="text-neon-green/40 shrink-0 w-5">{n}.</span>
+              <span class="text-dedsec-muted">{text}{hl && <span class="text-neon-green/70 ml-1">· {hl}</span>}</span>
+            </div>
+          ))}
+        </div>
+      </div>
+
+      <!-- Mode contributeur -->
+      <div class="card-neon px-5 py-5 flex flex-col">
+        <div class="flex items-center gap-3 mb-4">
+          <span class="text-neon-green font-mono text-xl leading-none">✎</span>
+          <div>
+            <div class="font-mono text-xs font-bold text-neon-green tracking-widest">MODE CONTRIBUTEUR</div>
+            <div class="text-dedsec-muted/60 text-[10px] font-mono">Édition au fil de la lecture</div>
+          </div>
+        </div>
+        <p class="text-dedsec-muted text-sm leading-relaxed m-0 mb-4">
+          Active le toggle <span class="text-neon-green font-mono">[● MODE CONTRIB.]</span>, puis <span class="text-dedsec-text">sélectionne n'importe quel passage</span> d'une page. Une bulle <span class="text-neon-green font-mono">✎ Proposer une édition</span> apparaît : la page et le passage exact sont capturés automatiquement.
+        </p>
+        <div class="space-y-2 font-mono text-xs mb-2">
+          {[
+            ['Correction', 'avant / après, format diff'],
+            ['Commentaire', 'passage ambigu, à clarifier'],
+            ['Source', 'rattacher une référence'],
+            ['Erreur factuelle', 'signaler un point faux ou daté'],
+          ].map(([k, d]) => (
+            <div class="flex gap-3 items-start">
+              <span class="text-neon-green/60 shrink-0">▸</span>
+              <span class="text-dedsec-muted"><span class="text-dedsec-text font-bold">{k}</span>, {d}</span>
+            </div>
+          ))}
+        </div>
+      </div>
+    </div>
+
+    <!-- Garantie anonymat -->
+    <div class="terminal text-xs font-mono mt-4">
+      <div class="text-neon-green font-bold mb-2 tracking-widest">▸ CE QUI EST GARANTI</div>
+      <div class="grid grid-cols-1 md:grid-cols-3 gap-3 text-dedsec-muted">
+        <div class="flex items-start gap-2"><span class="text-neon-green">✓</span> Aucune IP ni métadonnée client conservée</div>
+        <div class="flex items-start gap-2"><span class="text-neon-green">✓</span> Aucun compte, aucun cookie, aucun pistage</div>
+        <div class="flex items-start gap-2"><span class="text-neon-green">✓</span> Transmission directe vers un dépôt privé des mainteneurs</div>
+      </div>
+    </div>
+  </section>
+
+  <!-- VOIE 2, PROPOSER DIRECTEMENT (file de modération locale) -->
+  <section class="mb-12">
+    <h2 class="mb-2">▸ PROPOSER DIRECTEMENT (FILE DE MODÉRATION)</h2>
+    <p class="text-xs text-dedsec-muted font-mono mb-2">Un formulaire classique, si tu préfères. Ta proposition entre dans la file de modération interne et sera relue avant publication.</p>
+    <p class="text-[11px] text-dedsec-muted/60 font-mono mb-6">
+      Différence avec le dépôt anonyme ci-dessus : ce formulaire alimente la <span class="text-neon-green/70">file de modération du site</span> (et non un ticket GitHub). Les deux voies sont relues à la main avant toute publication.
+    </p>
+
+    <div class="card-neon px-5 py-6 max-w-3xl">
+      <form id="contrib-form" class="space-y-4">
+        <!-- Honeypot anti-bot (caché) -->
+        <input type="text" name="bot-field" tabindex="-1" autocomplete="off"
+               style="position:absolute;left:-9999px;width:1px;height:1px;opacity:0" aria-hidden="true" />
+
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+          <div>
+            <label class="block font-mono text-[10px] text-neon-green/70 tracking-widest mb-2">TYPE DE CONTRIBUTION</label>
+            <select name="type" class="contrib-input">
+              <option value="wiki">Nouvelle page / section wiki</option>
+              <option value="correction">Correction d'une page existante</option>
+              <option value="incident">Signaler un incident pour la carte</option>
+              <option value="juridique">Apport juridique / source</option>
+              <option value="autre">Autre</option>
+            </select>
+          </div>
+          <div>
+            <label class="block font-mono text-[10px] text-neon-green/70 tracking-widest mb-2">PAGE CONCERNÉE <span class="text-dedsec-muted/40">(optionnel)</span></label>
+            <input type="text" name="page" class="contrib-input" placeholder="ex : /wiki/Repression" />
+          </div>
+        </div>
+
+        <div>
+          <label class="block font-mono text-[10px] text-neon-green/70 tracking-widest mb-2">TITRE <span class="text-red-400">*</span></label>
+          <input type="text" name="title" required maxlength="200" class="contrib-input" placeholder="Résume ta proposition en une ligne" />
+        </div>
+
+        <div>
+          <label class="block font-mono text-[10px] text-neon-green/70 tracking-widest mb-2">CONTENU <span class="text-red-400">*</span></label>
+          <textarea name="body" required maxlength="8000" rows="7" class="contrib-input font-mono"
+            placeholder="Décris ta contribution. Markdown accepté. Source toute affirmation factuelle. N'inclus aucun nom ni lieu identifiant."></textarea>
+        </div>
+
+        <div>
+          <label class="block font-mono text-[10px] text-neon-green/70 tracking-widest mb-2">PSEUDO <span class="text-dedsec-muted/40">(optionnel)</span></label>
+          <input type="text" name="author" maxlength="80" class="contrib-input" placeholder="Comment te créditer (laisse vide pour anonyme)" />
+        </div>
+
+        <div class="border border-red-500/30 bg-red-500/5 px-4 py-3 font-mono text-[11px] text-dedsec-muted">
+          <span class="text-red-400 font-bold">Avant d'envoyer :</span> anonymise tout (aucun nom, lieu précis ou date identifiante). Cette proposition n'est pas publiée immédiatement, elle passe par la modération.
+        </div>
+
+        <div class="flex items-center gap-4 flex-wrap">
+          <button type="submit" id="contrib-submit" class="btn-neon no-underline text-xs">▸ Envoyer en modération</button>
+          <span id="contrib-status" class="font-mono text-[11px]"></span>
+        </div>
+      </form>
+    </div>
+  </section>
+
+  <style>
+    .contrib-input{
+      width:100%;background:rgba(0,0,0,.4);border:1px solid rgba(0,255,159,.18);
+      color:#d8dce4;font-family:'JetBrains Mono',monospace;font-size:12.5px;
+      padding:10px 12px;border-radius:4px;transition:border .15s;
+    }
+    .contrib-input:focus{outline:none;border-color:rgba(0,255,159,.55)}
+    .contrib-input::placeholder{color:rgba(122,122,138,.5)}
+    select.contrib-input{appearance:none;cursor:pointer}
+  </style>
+
+  <script>
+    (function(){
+      const form = document.getElementById('contrib-form');
+      const btn = document.getElementById('contrib-submit');
+      const status = document.getElementById('contrib-status');
+      if(!form) return;
+      form.addEventListener('submit', async (e) => {
+        e.preventDefault();
+        const fd = new FormData(form);
+        const payload = Object.fromEntries(fd.entries());
+        btn.disabled = true; status.textContent = 'Envoi…'; status.style.color = '#7a7a8a';
+        try{
+          const r = await fetch('/api/contribuer', {
+            method:'POST',
+            headers:{'Content-Type':'application/json'},
+            body: JSON.stringify(payload),
+          });
+          const d = await r.json().catch(()=>({}));
+          if(r.ok && d.ok){
+            status.textContent = '✓ Reçu. Ta contribution est en file de modération.';
+            status.style.color = '#00ff9f';
+            form.reset();
+          } else {
+            status.textContent = '✗ ' + (d.error || 'Échec de l\'envoi.');
+            status.style.color = '#ff6b7a';
+          }
+        }catch{
+          status.textContent = '✗ Réseau indisponible.';
+          status.style.color = '#ff6b7a';
+        }finally{ btn.disabled = false; }
+      });
+    })();
+  </script>
+
+  <!-- VOIE 3, GITHUB (option avancée) -->
+  <section class="mb-12">
+    <h2 class="mb-2">▸ VIA GITHUB (OPTION AVANCÉE)</h2>
+    <p class="text-xs text-dedsec-muted font-mono mb-6">Pour les profils techniques. Traçable, public, open source. Nécessite un compte GitHub.</p>
+
+    <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+
+      <!-- GitHub PR -->
+      <div class="card-neon px-5 py-5 md:col-span-2">
+        <div class="flex items-center gap-3 mb-4">
+          <span class="text-neon-green font-mono text-xl leading-none">⊞</span>
+          <div>
+            <div class="font-mono text-xs font-bold text-neon-green tracking-widest">PULL REQUEST</div>
+            <div class="text-dedsec-muted/60 text-[10px] font-mono">Contrôle total sur le contenu proposé</div>
+          </div>
+        </div>
+        <div class="space-y-2 font-mono text-xs mb-5">
+          {[
+            ['01', 'Fork le repo', 'KernelRequiem/SoundSystemHardening'],
+            ['02', 'Crée ou modifie un fichier', '.md dans src/content/wiki/'],
+            ['03', 'Ouvre une Pull Request avec une description claire', null],
+            ['04', 'Le contenu est relu, vérifié, puis mergé', null],
+          ].map(([n, text, highlight]) => (
+            <div class="flex gap-3 items-start">
+              <span class="text-neon-green/40 shrink-0 w-5">{n}.</span>
+              <span class="text-dedsec-muted">{text}{highlight && <span class="text-neon-green ml-1">{highlight}</span>}</span>
+            </div>
+          ))}
+        </div>
+        <div class="flex gap-3 flex-wrap">
+          <a href="https://github.com/KernelRequiem/SoundSystemHardening" target="_blank" rel="noopener noreferrer" class="btn-neon no-underline text-xs">
+            ▸ Repo GitHub
+          </a>
+          <a href="https://github.com/KernelRequiem/SoundSystemHardening/issues/new" target="_blank" rel="noopener noreferrer" class="btn-neon no-underline text-xs">
+            ▸ Ouvrir une Issue
+          </a>
+        </div>
+      </div>
+
+      <!-- Compétences spécialisées -->
+      <div class="card-neon px-5 py-5">
+        <div class="flex items-center gap-3 mb-4">
+          <span class="text-neon-green font-mono text-xl leading-none">◧</span>
+          <div>
+            <div class="font-mono text-xs font-bold text-neon-green tracking-widest">EXPERTISES</div>
+            <div class="text-dedsec-muted/60 text-[10px] font-mono">Profils recherchés</div>
+          </div>
+        </div>
+        <div class="space-y-3">
+          {[
+            { role: 'Juriste / avocat', desc: 'Droits, RIPOST, recours', icon: '⚖' },
+            { role: 'Profil cyber',     desc: 'OPSEC, corrections techniques', icon: '⊡' },
+            { role: 'Traducteur',       desc: 'EN · DE · ES', icon: '◈' },
+          ].map(({ role, desc, icon }) => (
+            <div class="flex items-center gap-3 border-b border-dedsec-border/40 pb-3 last:border-0 last:pb-0">
+              <span class="text-neon-green/60 font-mono text-base shrink-0">{icon}</span>
+              <div>
+                <div class="font-mono text-xs font-bold text-dedsec-text">{role}</div>
+                <div class="text-[10px] text-dedsec-muted/60 font-mono">{desc}</div>
+              </div>
+            </div>
+          ))}
+        </div>
+      </div>
+
+      <!-- Témoignage terrain -->
+      <div class="card-neon px-5 py-5 md:col-span-3">
+        <div class="flex items-start gap-4">
+          <span class="text-red-400/80 font-mono text-xl leading-none shrink-0 mt-0.5">▲</span>
+          <div class="flex-1 min-w-0">
+            <div class="font-mono text-xs font-bold text-neon-green tracking-widest mb-1">PARTAGER UN CAS TERRAIN</div>
+            <p class="text-dedsec-muted text-sm m-0 mb-3">Tu as vécu une saisie, une GAV, une intervention ? Ce retour enrichit le wiki. Passe par le dépôt anonyme ou un canal chiffré ci-dessous.</p>
+            <div class="border border-red-500/30 bg-red-500/5 px-4 py-3 font-mono text-xs text-dedsec-muted">
+              <span class="text-red-400 font-bold">Sécurité :</span> Anonymise systématiquement - aucun nom, aucun lieu précis, aucune date identifiante. Supprime les métadonnées des fichiers joints.
+            </div>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </section>
+
+  <!-- CONTACT DIRECT -->
+  <section class="mb-12">
+    <h2 class="mb-2">▸ CONTACT DIRECT</h2>
+    <p class="text-xs text-dedsec-muted font-mono mb-6">Pour les échanges sensibles, préférer Signal ou Session.</p>
+
+    <div class="grid grid-cols-1 md:grid-cols-3 gap-4 mb-4">
+
+      <!-- Email principal -->
+      <div class="card-neon px-5 py-5">
+        <div class="font-mono text-xs text-neon-green font-bold tracking-widest mb-4">◆ EMAIL</div>
+        <a
+          href="mailto:contact@soundsystemhardening.fr"
+          class="font-mono text-xs text-neon-green hover:text-white no-underline transition-colors block mb-2 break-all"
+          style="word-break: break-all; overflow-wrap: anywhere;"
+        >contact@soundsystemhardening.fr</a>
+        <p class="text-[10px] text-dedsec-muted/50 font-mono m-0 mt-2">Chiffré · Sans tiers</p>
+      </div>
+
+      <!-- PGP -->
+      <div class="card-neon px-5 py-5">
+        <div class="font-mono text-xs text-neon-green font-bold tracking-widest mb-4">◆ PGP</div>
+        <p class="font-mono text-xs text-dedsec-muted mb-4">Pour chiffrer les emails sensibles avant envoi.</p>
+        <div class="flex flex-col gap-2 mb-4">
+          <a href="/pgp-public-key.asc" download class="btn-neon no-underline text-xs w-fit">▸ Télécharger la clé</a>
+          <a href="https://keys.openpgp.org/search?q=contact%40soundsystemhardening.fr" target="_blank" rel="noopener noreferrer"
+             class="font-mono text-[10px] text-neon-green/50 hover:text-neon-green transition-colors no-underline">
+            keys.openpgp.org →
+          </a>
+        </div>
+        <p class="text-[10px] text-dedsec-muted/40 font-mono m-0 break-all" style="word-break: break-all;">
+          Fingerprint : 1399 F26F 66A3 D65C FC76 B496 BF9D E339 889F D4FD
+        </p>
+      </div>
+
+      <!-- Canaux chiffrés -->
+      <div class="card-neon px-5 py-5">
+        <div class="font-mono text-xs text-neon-green font-bold tracking-widest mb-4">◆ MESSAGERIE</div>
+        <p class="font-mono text-xs text-dedsec-muted mb-4">Échanges chiffrés de bout en bout, sans trace côté site.</p>
+        <a href="/reseaux" class="btn-neon no-underline text-xs w-fit block">▸ Canaux & coordonnées</a>
+      </div>
+
+    </div>
+
+    <!-- Canaux sécurisés -->
+    <div class="grid grid-cols-1 md:grid-cols-3 gap-3">
+      {[
+        { name: 'Signal',  icon: '⊕', desc: 'Chiffrement E2E · Messages éphémères', sub: 'Standard de référence',      url: 'https://signal.org',        link: 'signal.org →'       },
+        { name: 'Session', icon: '⊗', desc: 'Sans numéro de téléphone requis',       sub: 'Anonymat renforcé',          url: 'https://getsession.org',    link: 'getsession.org →'   },
+        { name: 'Briar',   icon: '⊘', desc: 'P2P · Sans serveur central',            sub: 'Fonctionne sans internet',   url: 'https://briarproject.org',  link: 'briarproject.org →' },
+      ].map(c => (
+        <div class="card-neon px-4 py-4 flex items-center gap-4">
+          <span class="text-neon-green font-mono text-2xl leading-none shrink-0">{c.icon}</span>
+          <div class="flex-1 min-w-0">
+            <div class="font-mono text-xs font-bold text-neon-green tracking-widest">{c.name}</div>
+            <div class="text-[10px] text-dedsec-muted/70 font-mono mt-0.5">{c.desc}</div>
+            <div class="text-[9px] text-dedsec-muted/40 font-mono">{c.sub}</div>
+          </div>
+          <a href={c.url} target="_blank" rel="noopener"
+             class="font-mono text-[10px] text-neon-green/40 hover:text-neon-green transition-colors no-underline shrink-0">
+            {c.link}
+          </a>
+        </div>
+      ))}
+    </div>
+  </section>
+
+  <!-- PRIORITÉS -->
+  <section class="mb-12">
+    <h2 class="mb-2">▸ CE QUI MANQUE</h2>
+    <p class="text-xs text-dedsec-muted font-mono mb-6">Pages vides ou inexistantes, classées par urgence.</p>
+
+    <div class="space-y-2">
+      {[
+        { label: 'Templates de recours',        desc: '6 templates cités mais non rédigés - GAV, saisie, AFD, référé',             priority: 'CRITIQUE'    },
+        { label: 'Après l\'événement',           desc: 'Que faire dans les 72h après une intervention ? Processus complet absent',   priority: 'CRITIQUE'    },
+        { label: 'Veille RIPOST',               desc: 'Tableau de bord de la navette parlementaire en cours',                       priority: 'URGENT'      },
+        { label: 'Jurisprudence',               desc: 'Compiler les décisions exploitables (TA Montpellier, Cass. 2020...)',         priority: 'IMPORTANT'   },
+        { label: 'Guide débutant',              desc: 'Monter un collectif, acquérir du matériel, premiers réflexes',               priority: 'IMPORTANT'   },
+        { label: 'Carte ressources régionales', desc: 'Contacts, avocats, assos par région',                                        priority: 'SOUHAITABLE' },
+      ].map(item => (
+        <div class="flex items-start gap-4 bg-dedsec-darker border border-dedsec-border hover:border-neon-green/20 px-4 py-3 transition-all group">
+          <span class={`font-mono text-[9px] shrink-0 mt-0.5 tracking-widest border px-1.5 py-0.5 ${
+            item.priority === 'CRITIQUE'    ? 'text-red-400 border-red-400/40'          :
+            item.priority === 'URGENT'      ? 'text-red-400/60 border-red-400/25'       :
+            item.priority === 'IMPORTANT'   ? 'text-neon-green/70 border-neon-green/30' :
+                                              'text-dedsec-muted border-dedsec-border'
+          }`}>
+            {item.priority}
+          </span>
+          <div class="flex-1 min-w-0">
+            <div class="font-mono text-sm text-dedsec-text font-bold">{item.label}</div>
+            <div class="text-xs text-dedsec-muted mt-0.5">{item.desc}</div>
+          </div>
+          <a
+            href="https://github.com/KernelRequiem/SoundSystemHardening/issues/new"
+            target="_blank"
+            rel="noopener noreferrer"
+            class="text-[10px] font-mono text-dedsec-muted/50 group-hover:text-neon-green no-underline transition-colors shrink-0 self-center"
+          >Je contribue →</a>
+        </div>
+      ))}
+    </div>
+  </section>
+
+  <!-- LICENCE -->
+  <section class="mb-8">
+    <div class="terminal text-xs font-mono">
+      <div class="text-neon-green font-bold mb-2 tracking-widest">▸ LICENCE</div>
+      <p class="text-dedsec-muted m-0">
+        Cette plateforme est publiée sous <span class="text-neon-green">Creative Commons BY-SA 4.0</span>.
+        Copie, modification et redistribution libres, à condition de citer la source et de publier sous la même licence.
+      </p>
+      <p class="text-dedsec-muted mt-2 mb-0">
+        Zéro tracking · Zéro cookies · Zéro publicité · Code sur GitHub · Infrastructure auto-gérée.
+      </p>
+    </div>
+  </section>
+
+</Layout>

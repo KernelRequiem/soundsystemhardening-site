@@ -1,0 +1,63 @@
+---
+// Page d'erreur serveur (500) personnalisée.
+// Astro la sert automatiquement en cas d'erreur non gérée. Volontairement
+// AUTONOME (pas de Layout) : si le rendu d'un composant/layout est la cause de
+// l'erreur, cette page doit pouvoir s'afficher quand même. Esprit terminal, sobre.
+export const prerender = false;
+Astro.response.status = 500;
+---
+
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Erreur serveur · SoundSystemHardening</title>
+  <link rel="icon" href="/favicon.ico" />
+  <style>
+    @font-face {
+      font-family: 'JetBrains Mono'; font-style: normal; font-weight: 400;
+      font-display: swap; src: url('/fonts/jetbrains-mono-latin-400-normal.woff2') format('woff2');
+    }
+    @font-face {
+      font-family: 'JetBrains Mono'; font-style: normal; font-weight: 700;
+      font-display: swap; src: url('/fonts/jetbrains-mono-latin-700-normal.woff2') format('woff2');
+    }
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    html, body { min-height: 100%; background: #0a0a0f; color: #e8e8f0; font-family: 'JetBrains Mono', monospace; }
+    .wrap { min-height: 100vh; display: flex; flex-direction: column; align-items: center; justify-content: center; text-align: center; padding: 24px; }
+    .code { font-size: clamp(64px, 18vw, 128px); font-weight: 800; line-height: 1; color: #e8e8f0; text-shadow: 0 0 24px rgba(0,255,159,0.12); letter-spacing: 0.04em; }
+    .tag { font-size: 10px; letter-spacing: 0.24em; text-transform: uppercase; color: rgba(255,68,68,0.85); margin: 16px 0 10px; }
+    .title { font-size: clamp(16px, 3.5vw, 20px); font-weight: 700; color: #e8e8f0; margin-bottom: 10px; }
+    .text { font-size: 13px; line-height: 1.6; color: rgba(122,122,138,0.95); max-width: 420px; margin: 0 auto 26px; }
+    .actions { display: flex; flex-wrap: wrap; gap: 12px; justify-content: center; }
+    .btn { font-size: 11px; font-weight: 700; letter-spacing: 0.1em; text-transform: uppercase; text-decoration: none; padding: 11px 20px; border-radius: 3px; transition: all 0.15s; }
+    .btn-primary { background: #00ff9f; color: #06120d; }
+    .btn-primary:hover { box-shadow: 0 0 0 1px rgba(0,255,159,0.6), 0 10px 30px -12px rgba(0,255,159,0.7); }
+    .btn-ghost { border: 1px solid rgba(42,42,58,0.9); color: rgba(232,232,240,0.9); background: rgba(0,255,159,0.04); }
+    .btn-ghost:hover { border-color: rgba(0,255,159,0.5); color: #00ff9f; }
+    .dot { display: inline-block; width: 7px; height: 7px; border-radius: 50%; background: #ff4444; box-shadow: 0 0 8px #ff4444; margin-right: 7px; vertical-align: 1px; }
+    .note { margin-top: 24px; font-size: 10.5px; color: rgba(122,122,138,0.7); line-height: 1.6; max-width: 420px; }
+    .note a { color: rgba(0,255,159,0.8); }
+  </style>
+</head>
+<body>
+  <div class="wrap">
+    <div class="code">500</div>
+    <div class="tag"><span class="dot"></span>Erreur serveur</div>
+    <div class="title">Quelque chose a planté de notre côté</div>
+    <p class="text">
+      Ce n'est pas toi : une erreur est survenue sur le serveur. Réessaie dans un instant,
+      ou reviens à l'accueil. Tes données ne sont pas affectées (le site ne stocke rien sur toi).
+    </p>
+    <div class="actions">
+      <a href="/" class="btn btn-primary">◆ Accueil</a>
+      <a href="/urgence" class="btn btn-ghost">▲ Urgence</a>
+    </div>
+    <p class="note">
+      Si l'erreur persiste, signale-la nous via <a href="/reseaux">Signal</a>.
+      Pour les situations sensibles, passe par Tor ou un VPN.
+    </p>
+  </div>
+</body>
+</html>

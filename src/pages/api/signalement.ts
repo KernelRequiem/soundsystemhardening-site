@@ -1,0 +1,112 @@
+// src/pages/api/signalement.ts
+// Endpoint SSR - reçoit un signalement de problème wiki, envoie un email via SMTP.
+// Variables d'environnement requises : SMTP_HOST, SMTP_PORT, SMTP_USER, SMTP_PASS, CONTACT_TO
+
+import type { APIRoute } from 'astro';
+import nodemailer from 'nodemailer';
+
+export const prerender = false;
+
+// Origine autorisée, doit correspondre à la valeur dans middleware.ts
+const CORS_ORIGIN = 'https://soundsystemhardening.fr';
+const corsHeaders = {
+  'Access-Control-Allow-Origin':  CORS_ORIGIN,
+  'Access-Control-Allow-Methods': 'POST, OPTIONS',
+  'Access-Control-Allow-Headers': 'Content-Type',
+} as const;
+
+export const POST: APIRoute = async ({ request }) => {
+  // ── Parse body ────────────────────────────────────────────────────────────
+  const ct = request.headers.get('content-type') || '';
+  let data: Record<string, string> = {};
+
+  if (ct.includes('application/json')) {
+    data = await request.json();
+  } else {
+    const text = await request.text();
+    new URLSearchParams(text).forEach((v, k) => { data[k] = v; });
+  }
+
+  // ── Honeypot ──────────────────────────────────────────────────────────────
+  if (data['bot-field']) {
+    return new Response(JSON.stringify({ ok: true }), { status: 200, headers: corsHeaders });
+  }
+
+  // ── Validation ────────────────────────────────────────────────────────────
+  if (!data.type?.trim() || !data.description?.trim()) {
+    return new Response(
+      JSON.stringify({ ok: false, error: 'Champs requis manquants (type, description).' }),
+      { status: 400, headers: { 'Content-Type': 'application/json', ...corsHeaders } }
+    );
+  }
+
+  // ── Limites de taille (anti-DoS, anti-email geant) ──────────────────────────
+  if (
+    data.type.length > 100 ||
+    data.description.length > 5000 ||
+    (data.page?.length ?? 0) > 300
+  ) {
+    return new Response(
+      JSON.stringify({ ok: false, error: 'Champs trop longs.' }),
+      { status: 400, headers: { 'Content-Type': 'application/json', ...corsHeaders } }
+    );
+  }
+  // Type/page alimentent l'en-tete Subject : on neutralise les retours a la ligne.
+  data.type = data.type.replace(/[\r\n]+/g, ' ').trim();
+  if (data.page) data.page = data.page.replace(/[\r\n]+/g, ' ').trim();
+
+  // ── Envoi SMTP ────────────────────────────────────────────────────────────
+  // Paramètres SMTP fournis par les variables d'environnement au runtime.
+  // Aucune valeur d'hébergeur en dur.
+  const smtpHost = process.env.SMTP_HOST || import.meta.env.SMTP_HOST;
+  const smtpPort = Number(process.env.SMTP_PORT || import.meta.env.SMTP_PORT) || 587;
+  const smtpUser = process.env.SMTP_USER || import.meta.env.SMTP_USER;
+  const smtpPass = process.env.SMTP_PASS || import.meta.env.SMTP_PASS;
+
+  if (!smtpHost || !smtpUser || !smtpPass) {
+    console.error('[API /signalement] Paramètres SMTP manquants - vérifier les variables d\'environnement.');
+    return new Response(
+      JSON.stringify({ ok: false, error: 'Configuration serveur incomplète. Passez par Signal.' }),
+      { status: 500, headers: { 'Content-Type': 'application/json', ...corsHeaders } }
+    );
+  }
+
+  const transporter = nodemailer.createTransport({
+    host:   smtpHost,
+    port:   smtpPort,
+    secure: smtpPort === 465,
+    auth: { user: smtpUser, pass: smtpPass },
+  });
+
+  const body = [
+    `Type         : ${data.type}`,
+    `Page         : ${data.page?.trim() || 'Non renseignée'}`,
+    ``,
+    `Description`,
+    `─────────────────────────────────────────`,
+    data.description,
+    ``,
+    `─────────────────────────────────────────`,
+    `Soumis via soundsystemhardening.fr/contact`,
+  ].join('\n');
+
+  try {
+    await transporter.sendMail({
+      from:    `"SoundSystem Hardening" <${smtpUser}>`,
+      to:      process.env.CONTACT_TO || import.meta.env.CONTACT_TO,
+      subject: `[Signalement SSH] ${data.type}${data.page ? ' - ' + data.page : ''}`,
+      text:    body,
+    });
+
+    return new Response(JSON.stringify({ ok: true }), {
+      status: 200,
+      headers: { 'Content-Type': 'application/json', ...corsHeaders },
+    });
+  } catch (err) {
+    console.error('[API /signalement] SMTP error:', err);
+    return new Response(
+      JSON.stringify({ ok: false, error: 'Erreur lors de l\'envoi. Réessayez ou ouvrez une issue GitHub.' }),
+      { status: 500, headers: { 'Content-Type': 'application/json', ...corsHeaders } }
+    );
+  }
+};
